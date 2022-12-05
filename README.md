@@ -31,4 +31,17 @@ Ensuite, dans le terminal, vous devez faire un `bin/console d:d:c` (doctrine:dat
 
 On installe les entités via Symfony:
 
-toutes les tables + relations du MLD -> cf. MLD cahier des charges![image](https://user-images.githubusercontent.com/108274050/205662589-38dd0b0e-f83e-4888-86bb-f0df3b9cdecf.png)
+toutes les tables + relations du MLD -> cf. MLD cahier des charges!
+
+On créé les entités via Doctrine avec ` bin\console make:entity` 
+
+On ajoute les propriétés de chaque entité et on migre les données afin qu'elles apparaissent dans la base de donnée
+
+Migration:
+
+`bin/console make:migration`
+
+`bin/console doctrine:migrations:migrate `
+
+On créé les relations entre les entités (entre les tables) avec make:entity et le type "relation"
+-> cf. MLD et dictionnaire de données.
