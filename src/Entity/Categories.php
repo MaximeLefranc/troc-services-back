@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CategoriesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +33,22 @@ class Categories
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="catgory")
+     */
+    private $advertisements;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Skill::class, mappedBy="category")
+     */
+    private $skills;
+
+    public function __construct()
+    {
+        $this->advertisements = new ArrayCollection();
+        $this->skills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -69,6 +87,66 @@ class Categories
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Advertisements>
+     */
+    public function getAdvertisements(): Collection
+    {
+        return $this->advertisements;
+    }
+
+    public function addAdvertisement(Advertisements $advertisement): self
+    {
+        if (!$this->advertisements->contains($advertisement)) {
+            $this->advertisements[] = $advertisement;
+            $advertisement->setCatgory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdvertisement(Advertisements $advertisement): self
+    {
+        if ($this->advertisements->removeElement($advertisement)) {
+            // set the owning side to null (unless already changed)
+            if ($advertisement->getCatgory() === $this) {
+                $advertisement->setCatgory(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkills(): Collection
+    {
+        return $this->skills;
+    }
+
+    public function addSkill(Skill $skill): self
+    {
+        if (!$this->skills->contains($skill)) {
+            $this->skills[] = $skill;
+            $skill->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): self
+    {
+        if ($this->skills->removeElement($skill)) {
+            // set the owning side to null (unless already changed)
+            if ($skill->getCategory() === $this) {
+                $skill->setCategory(null);
+            }
+        }
 
         return $this;
     }

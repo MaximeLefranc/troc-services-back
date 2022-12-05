@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -74,6 +76,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $nickname;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
+     */
+    private $advertisements;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="user")
+     */
+    private $message;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
+     */
+    private $skill;
+
+    public function __construct()
+    {
+        $this->advertisements = new ArrayCollection();
+        $this->message = new ArrayCollection();
+        $this->skill = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -256,6 +280,90 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNickname(string $nickname): self
     {
         $this->nickname = $nickname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Advertisements>
+     */
+    public function getAdvertisements(): Collection
+    {
+        return $this->advertisements;
+    }
+
+    public function addAdvertisement(Advertisements $advertisement): self
+    {
+        if (!$this->advertisements->contains($advertisement)) {
+            $this->advertisements[] = $advertisement;
+            $advertisement->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAdvertisement(Advertisements $advertisement): self
+    {
+        if ($this->advertisements->removeElement($advertisement)) {
+            // set the owning side to null (unless already changed)
+            if ($advertisement->getUser() === $this) {
+                $advertisement->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Messages>
+     */
+    public function getMessage(): Collection
+    {
+        return $this->message;
+    }
+
+    public function addMessage(Messages $message): self
+    {
+        if (!$this->message->contains($message)) {
+            $this->message[] = $message;
+            $message->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Messages $message): self
+    {
+        if ($this->message->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getUser() === $this) {
+                $message->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Skill>
+     */
+    public function getSkill(): Collection
+    {
+        return $this->skill;
+    }
+
+    public function addSkill(Skill $skill): self
+    {
+        if (!$this->skill->contains($skill)) {
+            $this->skill[] = $skill;
+        }
+
+        return $this;
+    }
+
+    public function removeSkill(Skill $skill): self
+    {
+        $this->skill->removeElement($skill);
 
         return $this;
     }
