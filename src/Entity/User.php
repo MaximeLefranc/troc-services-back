@@ -18,6 +18,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     *
      */
     private $id;
 
@@ -79,16 +80,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
+     * 
      */
     private $advertisements;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="user")
+     * 
      */
     private $message;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
+     * 
      */
     private $skill;
 
