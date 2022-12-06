@@ -4,17 +4,19 @@ namespace App\Controller\Api;
 
 use App\Entity\Advertisements;
 use App\Repository\AdvertisementsRepository;
+use DateTime;
+
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\BrowserKit\Request;
-use Symfony\Component\BrowserKit\Response as BrowserKitResponse;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
-use Symfony\Component\HttpFoundation\Response ;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AdvertisementsController extends AbstractController
+class AdvertisementsController extends ApiController
 {
     /**
      * @Route("/api/advertisements", name="browse_advertisements", methods={"GET"})
@@ -28,18 +30,71 @@ class AdvertisementsController extends AbstractController
         $json = $serializerInterface->serialize($allAd, 'json', ['groups' => [
             'get_advertisements_collection',
             'category_read',
-            'skill_read']]);
+            'skill_read'
+        ]]);
 
         //send response
 
         $response = new Response($json, 200, [
-         "content_type" => "application/json"
+            "content_type" => "application/json"
         ]);
         return $response;
     }
 
+    
+
     /**
-     * @Route("/api/advertisements/{id}", name="read_advertisement", methods={"GET"})
+     * @Route("/api/advertisements", name="add_advertisement", methods={"POST"})
+     */
+    public function addAdvertisement(
+    
+    SerializerInterface $serializerInterface, 
+    Request $request, 
+    ValidatorInterface $validatorInterface,
+    EntityManagerInterface $em)
+    {
+       
+        // retrieve the content by the class Request with the method getContent
+        $content = $request->getContent();
+
+        // Verify the JSON and deserialize the JSON content
+     try{
+        $ad = $serializerInterface->deserialize($content, Advertisements::class, 'json');
+        $ad->setCreatedAt(new \DateTime());
+
+        $errors = $validatorInterface->validate($ad);
+
+        if(count($errors)> 0){
+            return $this->json($errors, 400);
+        }
+
+        $em->persist($ad);
+        $em->flush();
+     } catch (NotEncodableValueException $e)
+     {
+        return $this->json([
+            'status' => '400',
+            'message' => $e->getMessage()
+        ],400);
+     }
+        
+        //return the correct http response
+
+        return $this->json(
+            $ad,
+            Response::HTTP_CREATED,
+
+            [],
+            [
+                // list of groups to use
+                "groups" => 'get_advertisements_collection'
+
+            ]
+        );
+    }
+
+    /**
+     * @Route("/api/advertisements/{id<\d+>}", name="read_advertisement", methods={"GET"})
      */
     public function readAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface, $id)
     {
@@ -49,62 +104,69 @@ class AdvertisementsController extends AbstractController
         if ($oneAdvert == null) {
             $response = new Response("l'annonce n'a pas été trouvée", 404, [
                 "content_type" => "application/json"
-               ]);
+            ]);
 
             return $response;
         } else {
             // serialize advertisement, and limit with the groups
             $json = $serializerInterface->serialize($oneAdvert, 'json', ['groups' => [
-              'get_advertisements_collection',
-              'category_read',
-              'skill_read']]);
+                'get_advertisements_collection',
+                'category_read',
+                'skill_read'
+            ]]);
 
             //send response
 
             $response = new Response($json, 200, [
-             "content_type" => "application/json"
+                "content_type" => "application/json"
             ]);
             return $response;
         }
     }
 
-      /**
-     * @Route("/api/advertisements", name="add_advertisement", methods={"POST"})
-     */
-    public function addAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface, HttpFoundationRequest $request, ValidatorInterface $validatorInterface)
+    /**
+    * @param ?Advertisements $advertisements
+    * @param SerializerInterface $serializerInterface
+    * @param EntityManagerInterface $entityManagerInterface
+    * @Route("/api/advertisements/{id<\d+>}", name="edit_advertisement", methods={"PUT", "PATCH"})
+    */
+    public function editAdvertisement(Advertisements $advertisements, Request $request, SerializerInterface $serializerInterface, 
+    EntityManagerInterface $entityManagerInterface)
     {
-        // retrieve the content by the class Request with the method getContent
-        $content = $request->getContent();
-
-        // Verify the JSON and deserialize the JSON content
-        try {
-            $newAdvert = $serializerInterface->deserialize($content, Advertisements::class, 'json');
-        } catch(Exception $e) { // if the json is not ok
-            // return error
-            return $this->json("Le contenu du JSON est mal formé", Response::HTTP_BAD_REQUEST);
+        // if errors...
+        if ($advertisements === null) {
+            return $this->json404("Pas d'annonces pour cet identifiant");
         }
-        $errors = $validatorInterface->validate($newAdvert);
 
-        
-            //add the new advertisement in BDD, persist + flush
-            $advertisementsRepository->add($newAdvert, true);
+        // receive object
+        $jsonContent = $request->getContent();
 
-            //return the correct http response
+        // deserialize the object
+        $serializerInterface->deserialize(
+            $jsonContent,
+            Advertisements::class,
+            'json',
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $advertisements]
+        );
 
-            return $this->json(
-                $newAdvert,
-                Response::HTTP_CREATED,
+        // update BDD
+        $entityManagerInterface->flush();
+
+        // TODO : renvoyer l'information que tout c'est bien passé
+        return $this->json(
+            $advertisements,
+            Response::HTTP_PARTIAL_CONTENT,
+            [
+                // redirection
+                "Location" => $this->generateUrl("read_advertisement", ["id" => $advertisements->getId()])
+            ],
+            // put the serialization groups
+            [
+                "groups" =>
                 [
-                    // Redirection
-                    "Location"=> $this->generateUrl('read_advertisement', ["id" => $newAdvert->getId()])
-                ],
-                [
-                    // list of groups to use
-                    "groups" => 'get_advertisements_collection'
-                 
-                    ]
-            );
-        }
-       
+                    "advertisements_read"
+                ]
+            ]
+        );
     }
-
+}

@@ -40,7 +40,7 @@ class Categories
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="catgory")
+     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="category")
      * 
      */
     private $advertisements;
@@ -111,7 +111,7 @@ class Categories
     {
         if (!$this->advertisements->contains($advertisement)) {
             $this->advertisements[] = $advertisement;
-            $advertisement->setCatgory($this);
+            $advertisement->setCategory($this);
         }
 
         return $this;
@@ -121,8 +121,8 @@ class Categories
     {
         if ($this->advertisements->removeElement($advertisement)) {
             // set the owning side to null (unless already changed)
-            if ($advertisement->getCatgory() === $this) {
-                $advertisement->setCatgory(null);
+            if ($advertisement->getCategory() === $this) {
+                $advertisement->setCategory(null);
             }
         }
 
