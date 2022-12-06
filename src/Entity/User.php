@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -21,6 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * 
      * @Groups({"user_browse"})
+     *
      */
     private $id;
 
@@ -42,65 +42,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"user_browse"})
      */
     private $biography;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=10)
-     * @Groups({"user_browse"})
      */
     private $zip_code;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"user_browse"})
      */
     private $birth_date;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
      */
     private $nickname;
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
+     * 
      */
     private $advertisements;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="user")
+     * 
      */
     private $message;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
+<<<<<<< HEAD
+<<<<<<< HEAD
      * @Groups({"user_browse"})
+=======
+     * 
+>>>>>>> main
+=======
+>>>>>>> parent of 25cca90 (controller skill et user créé avec authentification et entité user modifiée)
      */
     private $skill;
 
