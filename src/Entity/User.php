@@ -18,15 +18,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-<<<<<<< HEAD
-<<<<<<< HEAD
      * 
      * @Groups({"user_browse"})
-=======
      *
->>>>>>> main
-=======
->>>>>>> parent of 25cca90 (controller skill et user créé avec authentification et entité user modifiée)
      */
     private $id;
 
