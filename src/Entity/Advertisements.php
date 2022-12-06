@@ -6,6 +6,7 @@ use App\Repository\AdvertisementsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=AdvertisementsRepository::class)
@@ -16,53 +17,68 @@ class Advertisements
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get_advertisements_collection"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"get_advertisements_collection"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"get_advertisements_collection"})
+     * 
      */
     private $content;
 
     /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"get_advertisements_collection"})
+     */
+    private $approved;
+
+     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get_advertisements_collection"})
      */
     private $image;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $approved;
-
-    /**
      * @ORM\Column(type="datetime")
+     * @Groups({"get_advertisements_collection"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Groups({"get_advertisements_collection"})
      */
     private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"category_read"})
+     * 
      */
     private $catgory;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="advertisements")
+     * @Groups({"skill_read"})
      */
     private $skills;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements")
      * @ORM\JoinColumn(nullable=false)
+     *
+
+     * 
      */
     private $user;
 
