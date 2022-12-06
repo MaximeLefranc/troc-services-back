@@ -1,2 +1,2 @@
-GET http://localhost:8000/api/advertisements
+GET http://localhost:8000/api/advertisements/4
 Content-Type: application/json
