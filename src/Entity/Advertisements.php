@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AdvertisementsRepository;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -47,6 +48,7 @@ class Advertisements
      */
     private $image;
 
+ 
     /**
      * @ORM\Column(type="datetime")
      * @Groups({"get_advertisements_collection"})
@@ -60,7 +62,7 @@ class Advertisements
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements")
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"category_read"})
      * 
@@ -74,7 +76,7 @@ class Advertisements
     private $skills;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements", cascade={"persist"})
      * @ORM\JoinColumn(nullable=false)
      *
 

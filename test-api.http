@@ -1,2 +1,15 @@
-GET http://localhost:8000/api/advertisements/4
+POST http://localhost:8000/api/advertisements
 Content-Type: application/json
+
+{
+   
+    "title": "recherche personne qui pourrait r\u00e9parer mon mur",
+    "content": "Je recherche quelqu'un car j'ai fait un trou dans mon mur. Au secours ! \r\n",
+     "image": null,
+    "approved": false,
+    "updatedAt": null,
+    "catgory": {
+      "name": "Bricolage"
+    },
+    "userId": 3
+  }
