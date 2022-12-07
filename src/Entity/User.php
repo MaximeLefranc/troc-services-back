@@ -20,7 +20,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-     *
+     * @Groups({"user_browse"})
      */
     private $id;
 
@@ -42,58 +42,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_browse"})
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_browse"})
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"user_browse"})
      */
     private $biography;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_browse"})
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_browse"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=10)
+     * @Groups({"user_browse"})
      */
     private $zip_code;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"user_browse"})
      */
     private $birth_date;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"user_browse"})
      */
     private $nickname;
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
-     * 
      */
     private $advertisements;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="user")
-     * 
      */
     private $message;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
+     * @Groups({"user_browse"})
      */
     private $skill;
 
