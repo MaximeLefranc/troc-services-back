@@ -20,7 +20,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-
      *
      */
     private $id;
@@ -95,9 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
-
-=======
->>>>>>> parent of 25cca90 (controller skill et user créé avec authentification et entité user modifiée)
      */
     private $skill;
 
