@@ -15,16 +15,19 @@ class Messages
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"category_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"category_browse"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"category_browse"})
      */
     private $sentAt;
 
