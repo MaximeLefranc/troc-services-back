@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Constraints\DateTime as ConstraintsDateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AdvertisementsController extends ApiController
@@ -23,25 +24,14 @@ class AdvertisementsController extends ApiController
      */
     public function browseAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface)
     {
-        // select all advertisements
-        $allAd =  $advertisementsRepository->findAll();
+       
 
-        // serialize advertisement, and limit with the groups
-        $json = $serializerInterface->serialize($allAd, 'json', ['groups' => [
-            'get_advertisements_collection',
-            'category_read',
-            'skill_read'
-        ]]);
-
-        //send response
-
-        $response = new Response($json, 200, [
-            "content_type" => "application/json"
-        ]);
-        return $response;
+        return $this->json200($advertisementsRepository->findAll(), [
+      "groups" => 'advertisements_browse',
+        'category_read',
+        'skill_read'
+    ]);
     }
-
-    
 
     /**
      * @Route("/api/advertisements", name="add_advertisement", methods={"POST"})
@@ -60,8 +50,8 @@ class AdvertisementsController extends ApiController
         // Verify the JSON and deserialize the JSON content
      try{
         $ad = $serializerInterface->deserialize($content, Advertisements::class, 'json');
-        $ad->setCreatedAt(new \DateTime());
-
+    $ad->setCreatedAt(new \DateTime('@'.strtotime('now')));
+   
         $errors = $validatorInterface->validate($ad);
 
         if(count($errors)> 0){
@@ -87,7 +77,7 @@ class AdvertisementsController extends ApiController
             [],
             [
                 // list of groups to use
-                "groups" => 'get_advertisements_collection'
+                "groups" => 'advertisements_browse'
 
             ]
         );
@@ -102,39 +92,29 @@ class AdvertisementsController extends ApiController
         $oneAdvert =  $advertisementsRepository->find($id);
         // if an advert doesn't exist return 404
         if ($oneAdvert == null) {
-            $response = new Response("l'annonce n'a pas été trouvée", 404, [
-                "content_type" => "application/json"
-            ]);
+           return $this->json404(["erreur" => "l'annonce n'a pas été trouvée"]);
 
-            return $response;
-        } else {
-            // serialize advertisement, and limit with the groups
-            $json = $serializerInterface->serialize($oneAdvert, 'json', ['groups' => [
-                'get_advertisements_collection',
-                'category_read',
-                'skill_read'
-            ]]);
+            // serialize and return status 200
+        } return $this->json200([ "advertisements" => $oneAdvert],[
+            "groups" => 'advertisements_browse',
+              'category_read',
+              'skill_read'
+          ]);
 
-            //send response
-
-            $response = new Response($json, 200, [
-                "content_type" => "application/json"
-            ]);
-            return $response;
-        }
+        
     }
 
     /**
     * @param ?Advertisements $advertisements
     * @param SerializerInterface $serializerInterface
     * @param EntityManagerInterface $entityManagerInterface
-    * @Route("/api/advertisements/{id<\d+>}", name="edit_advertisement", methods={"PUT", "PATCH"})
+    * @Route("/api/advertisements/{id<\d+>}/edit", name="edit_advertisement", methods={"PUT", "PATCH"})
     */
     public function editAdvertisement(Advertisements $advertisements, Request $request, SerializerInterface $serializerInterface, 
     EntityManagerInterface $entityManagerInterface)
     {
         // if errors...
-        if ($advertisements === null) {
+        if ($advertisements == null) {
             return $this->json404("Pas d'annonces pour cet identifiant");
         }
 
@@ -157,8 +137,45 @@ class AdvertisementsController extends ApiController
             $advertisements,
             Response::HTTP_PARTIAL_CONTENT,
             [
-                // redirection
-                "Location" => $this->generateUrl("read_advertisement", ["id" => $advertisements->getId()])
+                
+            ],
+            // put the serialization groups
+            [
+                "groups" =>
+                [
+                    "advertisements_read"
+                ]
+            ]
+        );
+    }
+
+     /**
+    * @param ?Advertisements $advertisements
+    * @param SerializerInterface $serializerInterface
+    * @param EntityManagerInterface $entityManagerInterface
+    * @Route("/api/advertisements/{id<\d+>}/delete", name="delete_advertisement", methods={"PUT", "PATCH"})
+    */
+    public function deleteAdvertisement(Advertisements $advertisements, Request $request, SerializerInterface $serializerInterface, 
+    EntityManagerInterface $entityManagerInterface)
+    {
+        // if errors...
+        if ($advertisements == null) {
+            return $this->json404("Pas d'annonces pour cet identifiant");
+        }
+
+        // receive object
+       
+$advertisements->setApproved(true);
+
+        // update BDD
+        $entityManagerInterface->flush();
+
+        // TODO : renvoyer l'information que tout c'est bien passé
+        return $this->json(
+            $advertisements,
+            Response::HTTP_PARTIAL_CONTENT,
+            [
+                
             ],
             // put the serialization groups
             [

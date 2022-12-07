@@ -19,7 +19,7 @@ class Advertisements
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
      * 
      * 
      */
@@ -27,14 +27,14 @@ class Advertisements
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
      * 
      */
@@ -42,31 +42,36 @@ class Advertisements
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
      */
     private $approved;
 
      /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
      */
     private $image;
 
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime('@'.strtotime('now'));
+    }
+
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get_advertisements_collection"})
-     * @Groups({"advertisements_read"})
+     * 
+     * 
      * 
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get_advertisements_collection"})
-     * @Groups({"advertisements_read"})
+     *
+     * 
      */
     private $updatedAt;
 
@@ -97,6 +102,7 @@ class Advertisements
     public function __construct()
     {
         $this->skills = new ArrayCollection();
+      
      
     }
 
@@ -153,24 +159,24 @@ class Advertisements
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(?\DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
