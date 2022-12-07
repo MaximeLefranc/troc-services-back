@@ -18,6 +18,7 @@ class Skill
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"skills_read"})
      *
      */
     private $id;
@@ -30,7 +31,7 @@ class Skill
 
     /**
      * @ORM\ManyToMany(targetEntity=Advertisements::class, mappedBy="skills")
-     * 
+     * @Groups({"advertisements_browse"})
      * 
      */
     private $advertisements;
@@ -38,6 +39,7 @@ class Skill
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="skills")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"category_browse"})
      *
      */
     private $category;
