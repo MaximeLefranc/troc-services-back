@@ -59,7 +59,7 @@ class SkillController extends AbstractController
         return $this->json(
             // les données
             $skill,
-            // le code HTTP 200
+            // le code HTTP 200 TEST 
             Response::HTTP_OK,
             // les entètes HTTP, on n'a pas de besoin de les modifier, [] par défaut
             [],
