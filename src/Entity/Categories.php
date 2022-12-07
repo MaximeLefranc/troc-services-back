@@ -18,7 +18,7 @@ class Categories
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * 
+     * @Groups({"category_browse"})
      * 
      */
     private $id;
@@ -26,6 +26,7 @@ class Categories
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"category_read"})
+     * @Groups({"category_browse"})
      */
     private $name;
 
@@ -40,7 +41,7 @@ class Categories
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="catgory")
+     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="category")
      * 
      */
     private $advertisements;
@@ -48,6 +49,7 @@ class Categories
     /**
      * @ORM\OneToMany(targetEntity=Skill::class, mappedBy="category")
      *@Groups({"skills_read"})
+     *@Groups({"category_browse"})
      * 
      */
     private $skills;
@@ -111,7 +113,7 @@ class Categories
     {
         if (!$this->advertisements->contains($advertisement)) {
             $this->advertisements[] = $advertisement;
-            $advertisement->setCatgory($this);
+            $advertisement->setCategory($this);
         }
 
         return $this;
@@ -121,8 +123,8 @@ class Categories
     {
         if ($this->advertisements->removeElement($advertisement)) {
             // set the owning side to null (unless already changed)
-            if ($advertisement->getCatgory() === $this) {
-                $advertisement->setCatgory(null);
+            if ($advertisement->getCategory() === $this) {
+                $advertisement->setCategory(null);
             }
         }
 
