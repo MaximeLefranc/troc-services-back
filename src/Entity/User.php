@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -19,7 +20,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * 
-     * @Groups({"user_browse"})
      *
      */
     private $id;
@@ -94,14 +94,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
-<<<<<<< HEAD
-<<<<<<< HEAD
-     * @Groups({"user_browse"})
-=======
-     * 
->>>>>>> main
-=======
->>>>>>> parent of 25cca90 (controller skill et user créé avec authentification et entité user modifiée)
      */
     private $skill;
 

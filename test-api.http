@@ -1,2 +1,16 @@
-GET http://localhost:8000/api/advertisements/4
+POST  http://localhost:8000/api/advertisements
 Content-Type: application/json
+
+{
+  
+  "title": "blabla2",
+  "content": "blabla2",
+  "approved": false,
+  "createdAt": "2022-12-04 21:19:58",
+  "image": null,
+  "category": {
+    "name": "Beaut\u00e9 et bien-\u00eatre"
+  }
+
+}
+    

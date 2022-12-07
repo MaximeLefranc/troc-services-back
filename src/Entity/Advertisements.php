@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AdvertisementsRepository;
+use DateTime;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,55 +19,68 @@ class Advertisements
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
+     * 
      * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
+     * @Groups({"advertisements_read"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
+     * @Groups({"advertisements_read"})
      * 
      */
     private $content;
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
+     * @Groups({"advertisements_read"})
      */
-    private $approved;
+    private $approved = false;
 
      /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get_advertisements_collection"})
+     * @Groups({"advertisements_browse"})
+     * @Groups({"advertisements_read"})
+     * 
      */
     private $image;
 
+
+
+
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get_advertisements_collection"})
+     * 
+     * 
+     * 
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Groups({"get_advertisements_collection"})
+     *
+     * 
      */
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements")
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"category_read"})
      * 
+     * 
      */
-    private $catgory;
+    private $category;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="advertisements")
@@ -74,7 +89,7 @@ class Advertisements
     private $skills;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
      *
 
@@ -85,6 +100,8 @@ class Advertisements
     public function __construct()
     {
         $this->skills = new ArrayCollection();
+      
+     
     }
 
     public function getId(): ?int
@@ -164,14 +181,14 @@ class Advertisements
         return $this;
     }
 
-    public function getCatgory(): ?Categories
+    public function getCategory(): ?Categories
     {
-        return $this->catgory;
+        return $this->category;
     }
 
-    public function setCatgory(?Categories $catgory): self
+    public function setCategory(?Categories $category): self
     {
-        $this->catgory = $catgory;
+        $this->category = $category;
 
         return $this;
     }
