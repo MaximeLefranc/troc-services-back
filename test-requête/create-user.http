@@ -1,0 +1,14 @@
+POST  http://localhost:8080/api/user/add
+Content-Type: application/json
+
+{
+    "first_name": "MonUser",
+    "last_name": "MoNomDeFamille",
+    "biography": "1er test",
+    "address": "adresse test",
+    "city": "Haguenau",
+    "zip_code": "67500",
+    "birth_date": "1959-02-28",
+    "nickname": "nouha67",
+    
+  }

@@ -1,0 +1,15 @@
+POST  http://localhost:8080/api/advertisements
+Content-Type: application/json
+
+{
+  
+  "title": "blabla5",
+  "content": "blabla2",
+  "approved": false,
+  "createdAt": "2022-12-04 21:19:58",
+  "image": null,
+  "category": {
+    "name": "Beauté et bien-être"
+  }
+
+}

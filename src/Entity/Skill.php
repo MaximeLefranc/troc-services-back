@@ -18,20 +18,20 @@ class Skill
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"skills_read"})
+     * @Groups({"skill_browse"})
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"skills_read"})
+     * @Groups({"skill_browse"})
      */
     private $name;
 
     /**
      * @ORM\ManyToMany(targetEntity=Advertisements::class, mappedBy="skills")
-     * @Groups({"advertisements_browse"})
+     * @Groups({"advertisements_browse"}) // ajouter ce groupe dans le tableau des groupes du controller skillcontroller 
      * 
      */
     private $advertisements;
@@ -39,7 +39,6 @@ class Skill
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="skills")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"category_browse"})
      *
      */
     private $category;
