@@ -45,19 +45,17 @@ class Advertisements
      * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
      */
-    private $approved;
+    private $approved = false;
 
      /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"advertisements_browse"})
      * @Groups({"advertisements_read"})
+     * 
      */
     private $image;
 
-    public function setCreatedAtValue(): void
-    {
-        $this->createdAt = new \DateTime('@'.strtotime('now'));
-    }
+
 
 
     /**
@@ -76,7 +74,7 @@ class Advertisements
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
      * @Groups({"category_read"})
      * 
@@ -91,7 +89,7 @@ class Advertisements
     private $skills;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
      *
 

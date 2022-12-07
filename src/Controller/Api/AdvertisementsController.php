@@ -50,15 +50,22 @@ class AdvertisementsController extends ApiController
         // Verify the JSON and deserialize the JSON content
      try{
         $ad = $serializerInterface->deserialize($content, Advertisements::class, 'json');
-    $ad->setCreatedAt(new \DateTime('@'.strtotime('now')));
+        
+        $date = new DateTime();
+        $date->format('Y-m-d H:i:s');
+        $ad->setCreatedAt($date);
+
+
+
    
         $errors = $validatorInterface->validate($ad);
 
         if(count($errors)> 0){
             return $this->json($errors, 400);
         }
-
+        
         $em->persist($ad);
+     
         $em->flush();
      } catch (NotEncodableValueException $e)
      {
@@ -77,7 +84,7 @@ class AdvertisementsController extends ApiController
             [],
             [
                 // list of groups to use
-                "groups" => 'advertisements_browse'
+                "groups" => 'advertisements_browse', 'advertisements_read'
 
             ]
         );
@@ -128,7 +135,8 @@ class AdvertisementsController extends ApiController
             'json',
             [AbstractNormalizer::OBJECT_TO_POPULATE => $advertisements]
         );
-
+        $advertisements->setUpdatedAt(new DateTime('now'));
+        dd($advertisements);
         // update BDD
         $entityManagerInterface->flush();
 
@@ -149,41 +157,5 @@ class AdvertisementsController extends ApiController
         );
     }
 
-     /**
-    * @param ?Advertisements $advertisements
-    * @param SerializerInterface $serializerInterface
-    * @param EntityManagerInterface $entityManagerInterface
-    * @Route("/api/advertisements/{id<\d+>}/delete", name="delete_advertisement", methods={"PUT", "PATCH"})
-    */
-    public function deleteAdvertisement(Advertisements $advertisements, Request $request, SerializerInterface $serializerInterface, 
-    EntityManagerInterface $entityManagerInterface)
-    {
-        // if errors...
-        if ($advertisements == null) {
-            return $this->json404("Pas d'annonces pour cet identifiant");
-        }
-
-        // receive object
-       
-$advertisements->setApproved(true);
-
-        // update BDD
-        $entityManagerInterface->flush();
-
-        // TODO : renvoyer l'information que tout c'est bien passé
-        return $this->json(
-            $advertisements,
-            Response::HTTP_PARTIAL_CONTENT,
-            [
-                
-            ],
-            // put the serialization groups
-            [
-                "groups" =>
-                [
-                    "advertisements_read"
-                ]
-            ]
-        );
-    }
+    
 }
