@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Back-O'flix{% endblock %}
+
+{% block body %}
+    <h1>Back Troc'services</h1>
+    <div class="d-flex">
+        <div class="card" style="width: 18rem;margin:.75em">
+            <div class="card-header">Catégories</div>
+            <div class="card-body">
+                <a href="{{ path('backoffice_categories_new') }}" class="btn btn-success card-link">Créer</a>
+                <a href="{{ path('backoffice_categories') }}" class="btn btn-info card-link">voir</a>
+            </div>
+
+    </div>
+{% endblock %}
