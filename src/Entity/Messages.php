@@ -15,36 +15,50 @@ class Messages
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"category_browse"})
+     * 
+     * @Groups({"message_browse"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"category_browse"})
+     *
+     * @Groups({"message_browse"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"category_browse"})
+     * 
+     * @Groups({"message_browse"})
      */
     private $sentAt;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isRead;
+
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"message_browse"})
      */
-    private $isHidden;
+    private $isRead = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="message")
+     * @ORM\Column(type="boolean")
+     * @Groups({"message_browse"})
      */
-    private $user;
+    private $isHidden = false;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
+     * 
+     */
+    private $sender;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
+     * 
+     */
+    private $receiver;
 
     public function getId(): ?int
     {
@@ -75,6 +89,7 @@ class Messages
         return $this;
     }
 
+
     public function isIsRead(): ?bool
     {
         return $this->isRead;
@@ -99,14 +114,26 @@ class Messages
         return $this;
     }
 
-    public function getUser(): ?User
+    public function getSender(): ?User
     {
-        return $this->user;
+        return $this->sender;
     }
 
-    public function setUser(?User $user): self
+    public function setSender(?User $sender): self
     {
-        $this->user = $user;
+        $this->sender = $sender;
+
+        return $this;
+    }
+
+    public function getReceiver(): ?User
+    {
+        return $this->receiver;
+    }
+
+    public function setReceiver(?User $receiver): self
+    {
+        $this->receiver = $receiver;
 
         return $this;
     }
