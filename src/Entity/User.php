@@ -101,6 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
      * @Groups({"user_browse"})
+     * @Groups({"skill_browse"})
      */
     private $skill;
 
