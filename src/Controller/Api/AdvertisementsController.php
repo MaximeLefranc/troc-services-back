@@ -31,6 +31,7 @@ class AdvertisementsController extends ApiController
             'advertisements_browse',
             'category_browse',
             'skill_browse',
+            'user_browse'
         
         ]);
     }
