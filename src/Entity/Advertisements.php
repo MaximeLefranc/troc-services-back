@@ -54,6 +54,7 @@ class Advertisements
 
       /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     * @Groups({"advertisements_browse"})
      * 
      * @var File
      *
@@ -66,6 +67,7 @@ class Advertisements
 
     /**
      * @ORM\Column(type="string")
+     * @Groups({"advertisements_browse"})
      * 
      * @JMS\Expose
      * @JMS\SerializedName("photo")
@@ -117,6 +119,7 @@ class Advertisements
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"user_browse"})
      * 
      * 
      */
