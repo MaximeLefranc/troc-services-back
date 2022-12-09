@@ -28,8 +28,9 @@ class AdvertisementsController extends ApiController
 
         return $this->json200($advertisementsRepository->findAll(), [
       "groups" => 'advertisements_browse',
-        'category_read',
-        'skill_read'
+        'category_browse',
+        'skill_browse', 
+        'user_browse'
     ]);
     }
 
@@ -54,6 +55,9 @@ class AdvertisementsController extends ApiController
         $date = new DateTime();
         $date->format('Y-m-d H:i:s');
         $ad->setCreatedAt($date);
+     //   if($ad->setImage() === null ){
+     //       $ad->setImage('');
+     //   }
 
 
 
@@ -84,7 +88,10 @@ class AdvertisementsController extends ApiController
             [],
             [
                 // list of groups to use
-                "groups" => 'advertisements_browse', 'advertisements_read'
+                "groups" => 'advertisements_browse',
+                "category_browse",
+                'skill_browse',
+                'user_browse'
 
             ]
         );
@@ -104,8 +111,9 @@ class AdvertisementsController extends ApiController
             // serialize and return status 200
         } return $this->json200([ "advertisements" => $oneAdvert],[
             "groups" => 'advertisements_browse',
-              'category_read',
-              'skill_read'
+              'category_browse', // add category to the json content
+              'skill_browse',  // add skill to the json content
+              'user_browse' // add user content to the json
           ]);
 
         
@@ -151,7 +159,46 @@ class AdvertisementsController extends ApiController
             [
                 "groups" =>
                 [
-                    "advertisements_read"
+                    "advertisements_browse"
+                ]
+            ]
+        );
+    }
+
+     /**
+    * @param ?Advertisements $advertisements
+    * @param SerializerInterface $serializerInterface
+    * @param EntityManagerInterface $entityManagerInterface
+    * @Route("/api/advertisements/{id<\d+>}/delete", name="delete_advertisement", methods={"PUT"})
+    */
+    public function deleteAdvertisement(Advertisements $advertisements, Request $request, SerializerInterface $serializerInterface, 
+    EntityManagerInterface $entityManagerInterface)
+    {
+        // if errors...
+        if ($advertisements == null) {
+            return $this->json404("Pas d'annonces pour cet identifiant");
+        }
+
+        // modify objects
+       
+    $advertisements->setIsHidden(true);
+    $advertisements->setUpdatedAt(new DateTime('now'));
+
+        // update BDD
+        $entityManagerInterface->flush();
+
+        // TODO : renvoyer l'information que tout c'est bien passé
+        return $this->json(
+            $advertisements,
+            Response::HTTP_PARTIAL_CONTENT,
+            [
+                
+            ],
+            // put the serialization groups
+            [
+                "groups" =>
+                [
+                    "advertisements_browse"
                 ]
             ]
         );

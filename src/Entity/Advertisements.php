@@ -28,14 +28,13 @@ class Advertisements
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"advertisements_browse"})
-     * @Groups({"advertisements_read"})
+
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"advertisements_browse"})
-     * @Groups({"advertisements_read"})
      * 
      */
     private $content;
@@ -43,24 +42,28 @@ class Advertisements
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"advertisements_browse"})
-     * @Groups({"advertisements_read"})
+  
      */
     private $approved = false;
 
      /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"advertisements_browse"})
-     * @Groups({"advertisements_read"})
+  
      * 
      */
     private $image;
 
-
+        /**
+     * @ORM\Column(type="boolean")
+     * @Groups({"advertisements_browse"})
+     */
+    private $isHidden = false;
 
 
     /**
      * @ORM\Column(type="datetime")
-     * 
+     * @Groups({"advertisements_browse"})
      * 
      * 
      */
@@ -76,7 +79,7 @@ class Advertisements
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"category_read"})
+     * @Groups({"category_browse"})
      * 
      * 
      */
@@ -84,15 +87,14 @@ class Advertisements
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="advertisements")
-     * @Groups({"skill_read"})
+     * @Groups({"skill_browse"})
      */
     private $skills;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
-     *
-
+     * @Groups({"user_browse"})
      * 
      */
     private $user;
@@ -153,6 +155,19 @@ class Advertisements
     public function setApproved(bool $approved): self
     {
         $this->approved = $approved;
+
+        return $this;
+    }
+
+
+    public function isHidden(): ?bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

@@ -1,14 +1,17 @@
-POST  http://localhost:8080/api/user/add
+POST  http://localhost:8080/api/user/register
 Content-Type: application/json
 
 {
-    "first_name": "MonUser",
-    "last_name": "MoNomDeFamille",
-    "biography": "1er test",
-    "address": "adresse test",
-    "city": "Haguenau",
-    "zip_code": "67500",
+    "first_name": "MonUser3",
+    "last_name": "MoNomDeFamille3",
+    "biography": "4eme test",
+    "address": "adresse test 2",
+    "city": "Lyon",
+    "zip_code": "69000",
     "birth_date": "1959-02-28",
-    "nickname": "nouha67",
+    "nickname": "jean",
+    "email": "test3@gmail.com",
+    "password": "123chaton"
+
     
   }

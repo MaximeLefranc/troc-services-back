@@ -25,7 +25,6 @@ class Categories
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"category_read"})
      * @Groups({"category_browse"})
      */
     private $name;
@@ -48,7 +47,7 @@ class Categories
 
     /**
      * @ORM\OneToMany(targetEntity=Skill::class, mappedBy="category")
-     *@Groups({"skills_read"})
+     *@Groups({"skills_browse"})
      *@Groups({"category_browse"})
      * 
      */
