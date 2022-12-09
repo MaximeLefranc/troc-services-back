@@ -3,9 +3,12 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Symfony\Bridge\Doctrine\Form\Type\SkillType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class UserType extends AbstractType
 {
@@ -23,7 +26,9 @@ class UserType extends AbstractType
             ->add('zip_code')
             ->add('birth_date')
             ->add('nickname')
-            ->add('skill')
+            ->add('imageFile', VichImageType::class)
+
+          
         ;
     }
 
