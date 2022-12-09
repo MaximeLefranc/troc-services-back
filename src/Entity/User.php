@@ -11,10 +11,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Fresh\VichUploaderSerializationBundle\Annotation as Fresh;
+use JMS\Serializer\Annotation as JMS;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @Vich\Uploadable
+ * @Fresh\VichSerializableClass
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -96,6 +102,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $nickname;
 
+         /**
+     * NOTE: This is not a mapped field of entity metadata, just a simple property.
+     * 
+     * @var File
+     *
+     * @JMS\Exclude
+     *
+     * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
+     *
+ 
+     */
+    private $imageFile;
+
+    /**
+     * @ORM\Column(type="string")
+     * 
+     * @JMS\Expose
+     * @JMS\SerializedName("photo")
+     * 
+     * @Fresh\VichSerializableField("imageFile")
+     * @var string|null
+     */
+    private $imageName;
+
+
+
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
      * @Groups({"advertisements_browse"})
@@ -149,6 +181,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->message = new ArrayCollection();
         $this->skill = new ArrayCollection();
     }
+
+    /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+ 
 
     public function getId(): ?int
     {

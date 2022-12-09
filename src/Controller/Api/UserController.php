@@ -23,7 +23,26 @@ use DateTime;
  */
 
 class UserController extends AbstractController
-{
+{   
+    /**
+     * @Route("/show", name="test", methods={"GET"})
+     *
+     * @return void
+     */
+    public function users(Request $request)
+    {
+
+        $users = new User;
+        $form = $this->createForm(UserType::class, $users);
+
+        $form->handleRequest($request);
+        return  $this->render("api/user/new.html.twig",
+        [
+
+
+                "form"=> $form->createView()
+        ]);
+    }
 
 
     /**
