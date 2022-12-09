@@ -34,12 +34,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * 
      * @Groups({"user_browse"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups({"user_browse"})
+     * 
+     * 
      */
     private $email;
 
@@ -99,6 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_browse"})
+     * 
      */
     private $nickname;
 
@@ -117,11 +121,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string")
-     * 
+     * @Groups({"advertisements_browse"})
      * @JMS\Expose
      * @JMS\SerializedName("photo")
      * 
      * @Fresh\VichSerializableField("imageFile")
+     * 
      * @var string|null
      */
     private $imageName;
@@ -130,7 +135,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
-     * @Groups({"advertisements_browse"})
+     * 
      */
     private $advertisements;
 
@@ -150,8 +155,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
-     * @Groups({"user_browse"})
      * @Groups({"skill_browse"})
+     * 
+     *
      */
     private $skill;
 

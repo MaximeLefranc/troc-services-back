@@ -27,10 +27,11 @@ class AdvertisementsController extends ApiController
 
 
         return $this->json200($advertisementsRepository->findAll(), [
-            "groups" => 'advertisements_browse',
+            "groups" => 
+            'advertisements_browse',
             'category_browse',
             'skill_browse',
-            'user_browse'
+        
         ]);
     }
 

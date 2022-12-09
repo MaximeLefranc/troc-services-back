@@ -31,7 +31,7 @@ class Skill
 
     /**
      * @ORM\ManyToMany(targetEntity=Advertisements::class, mappedBy="skills")
-     * @Groups({"advertisements_browse"}) // ajouter ce groupe dans le tableau des groupes du controller skillcontroller 
+     *  
      * 
      */
     private $advertisements;
