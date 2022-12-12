@@ -138,7 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
-     * @Groups({"user_browse"})
+     * 
      */
     private $advertisements;
 
