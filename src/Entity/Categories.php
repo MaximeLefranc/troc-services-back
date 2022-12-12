@@ -47,7 +47,7 @@ class Categories
 
     /**
      * @ORM\OneToMany(targetEntity=Skill::class, mappedBy="category")
-     *@Groups({"skills_browse"})
+     * @Groups({"category_browse"})
      *
      * 
      */
