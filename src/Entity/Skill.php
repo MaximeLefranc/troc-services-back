@@ -39,12 +39,15 @@ class Skill
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="skills")
      * @ORM\JoinColumn(nullable=false)
+     * 
+     * 
      *
      */
     private $category;
 
     /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="skill")
+     * 
      * 
      */
     private $users;
