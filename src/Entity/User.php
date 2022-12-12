@@ -110,13 +110,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
          /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     * 
+    * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
+     * @Groups({"user_browse"})
      * @var File
      *
      * @JMS\Exclude
      *
-     * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
-     * @Groups({"user_browse"})
+     * 
      *
  
      */
@@ -126,9 +126,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      * @Groups({"user_browse"})
      * @JMS\Expose
-     * @JMS\SerializedName("photo")
+     * @JMS\SerializedName("picture")
      * 
-     * @Fresh\VichSerializableField("imageFile")
+     * @Fresh\VichSerializableField("picture")
      * 
      * @var string|null
      */
