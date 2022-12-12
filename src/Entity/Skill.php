@@ -47,6 +47,7 @@ class Skill
     /**
      * @ORM\ManyToMany(targetEntity=User::class, mappedBy="skill")
      * 
+     * 
      */
     private $users;
 

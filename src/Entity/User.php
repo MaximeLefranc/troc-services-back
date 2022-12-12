@@ -48,12 +48,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
+     * @Groups({"user_browse"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Groups({"user_browse"})
      */
     private $password;
 
@@ -114,6 +116,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @JMS\Exclude
      *
      * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
+     * @Groups({"user_browse"})
      *
  
      */
@@ -121,7 +124,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string")
-     * @Groups({"advertisements_browse"})
+     * @Groups({"user_browse"})
      * @JMS\Expose
      * @JMS\SerializedName("photo")
      * 
@@ -135,7 +138,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
-     * 
+     * @Groups({"user_browse"})
      */
     private $advertisements;
 

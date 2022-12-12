@@ -24,26 +24,7 @@ use DateTime;
 
 class UserController extends AbstractController
 {   
-    /**
-     * @Route("/show", name="test", methods={"GET"})
-     *
-     * @return void
-     */
-    public function users(Request $request)
-    {
-
-        $users = new User;
-        $form = $this->createForm(UserType::class, $users);
-
-        $form->handleRequest($request);
-        return  $this->render("api/user/new.html.twig",
-        [
-
-
-                "form"=> $form->createView()
-        ]);
-    }
-
+    
 
     /**
      * @Route("/register", name="api_create_user", methods={"POST"})
@@ -89,12 +70,12 @@ class UserController extends AbstractController
            'message' => $e->getMessage()
        ],400);}
 
-        return $this->json(
+        return $this->json( $user,
         Response::HTTP_CREATED,
-        $user,
+        [],
         [
             // list of groups to use
-            "groups" => 'user_browse'
+            "groups" => 'user_browse', 'user_skill'
 
         ]);
     }
