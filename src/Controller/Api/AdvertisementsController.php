@@ -26,7 +26,7 @@ class AdvertisementsController extends ApiController
     {
 
 
-        return $this->json200($advertisementsRepository->findAll(), [
+        return $this->json200($advertisementsRepository->findAllOrderByCreation(), [
             "groups" => 
             'advertisements_browse',
             'category_browse',
