@@ -41,9 +41,17 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+    
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
+
+        # pour le test de redirection
+        - { path: ^/backoffice, roles: ROLE_ADMIN }
+        
+        - { path: ^/backoffice/main, roles: IS_AUTHENTICATED_FULLY }
+
+
+
+
 
 when@test:
     security:
@@ -57,3 +65,10 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+
+
+
+    role_hierarchy:
+        # les utilisateurs avec le role admin héritent du role Manager (et également du role user cf ci dessous)
+        # les utilisateurs avec le role ADMIN héritent du role user
+        ROLE_ADMIN: [ROLE_USER]
