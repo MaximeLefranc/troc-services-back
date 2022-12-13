@@ -71,7 +71,16 @@ class UserController extends AbstractController
         $user->setPassword($hashedPassword);
         $user->setReference($this->referenceFormat());
         $user->setCreated(new \DateTime());
-        $user->setUpdated(new \DateTime());
+      
+        if($user->setRoles()=== null){
+            $user->setRoles(["ROLE_USER"]);
+
+        }
+
+        if($user->setImageFile() === null ){
+            $user->setImageName('https://images.pexels.com/photos/1178498/pexels-photo-1178498.jpeg');
+            $user->setImageSize(0);
+        }
 
         $errors = $validatorInterface->validate($user);
 
