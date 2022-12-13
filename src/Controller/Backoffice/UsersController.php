@@ -42,6 +42,15 @@ class UsersController extends AbstractController
             $passwordHashed = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($passwordHashed);
             $user->setCreated(new \DateTime());
+            dd($user);
+
+            $file = $request->files->all()["image"];
+
+            $image = new Image();
+            $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
+                ->setMime($file->getClientMimeType())
+                ->setCreatedAt(new \Datetime('now'))
+                ->setTargetImageFile($file);
             $userRepository->add($user, true);
 
             return $this->redirectToRoute('backoffice_users', [], Response::HTTP_SEE_OTHER);

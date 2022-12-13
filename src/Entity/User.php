@@ -102,7 +102,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $birth_date;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user_browse"})
      * 
      */
@@ -114,7 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @Groups({"user_browse"})
      * @var File
      *
-     * @JMS\Exclude
+     * 
      *
      * 
      *
