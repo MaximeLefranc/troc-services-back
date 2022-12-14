@@ -147,13 +147,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
        /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
-     * 
+     * @Groups({"message_browse"})
      */
     private $sender;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="receiver", orphanRemoval=true)
-     * 
+     * @Groups({"message_browse"})
      */
     private $receiver;
 

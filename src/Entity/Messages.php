@@ -50,15 +50,15 @@ class Messages
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
-     * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
+     * 
      */
     private $sender;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
-     * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
+     * 
      */
     private $receiver;
 

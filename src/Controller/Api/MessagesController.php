@@ -29,26 +29,26 @@ class MessagesController extends ApiController
         ]);
 
         // return json content
-        return $this->json200($messagesRepository->findMessagesByReceiver(
+        return $this->json200($messagesRepository->findAll(
             [
                 
-                'receiver' => $user->getReceiver()
+            
             ]
 
-        ), [
-      "groups" => 'message_browse', 
-      'user_read_message'
+        ),  [
+      "groups" => 'message_browse', 'user_browse'
      
-    ]);
+     ]);
     }
 
     /** send a message
-     * @Route("/api/messages/send", name="send_message", methods={"POST"})
+     * @Route("/api/user/{id<\d+>}/messages/send", name="send_message", methods={"POST"})
      */
     public function sendMessage(Request $request, SerializerInterface $serializerInterface, ValidatorInterface $validatorInterface,
     EntityManagerInterface $em)
     {
         $content = $request->getContent();
+        
 
         try{
             $message = $serializerInterface->deserialize($content, Messages::class, 'json');
@@ -86,7 +86,7 @@ class MessagesController extends ApiController
         [
             // list of groups to use
             "groups" => 'message_browse',
-            "advertisement_browse",
+         
             'user_browse'
 
         ]
