@@ -147,13 +147,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
        /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
-     * @Groups({"message_browse"})
+     * @Groups({"user_browse"})
      */
     private $sender;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="receiver", orphanRemoval=true)
-     * @Groups({"message_browse"})
+     * @Groups({"user_browse"})
      */
     private $receiver;
 
@@ -184,6 +184,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated;
+
+ 
 
     public function __construct()
     {
@@ -573,4 +575,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }

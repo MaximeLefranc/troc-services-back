@@ -114,7 +114,8 @@ class UserController extends AbstractController
                 "groups" => 
                 [
                     "user_browse",
-                    'skill_browse' // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur,
+                    'message_browse'
                 ]
             ]
         );
@@ -152,7 +153,8 @@ class UserController extends AbstractController
                 "groups" => 
                 [
                     "user_browse", // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                    'skill_browse' // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'skill_browse', // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'message_browse'
                  
                 ]
             ]
