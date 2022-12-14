@@ -17,26 +17,47 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class MessagesController extends ApiController
 {
     /** show all received
-     * @Route("/api/user/{id<\d+>}/messages", name="browse_messages", methods={"GET"})
+     * @Route("/api/user/{id}/messages", name="browse_messages", methods={"GET"})
      */
     public function browseMessageById($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
     {
+
+        // todo : ce que je veux faire 
+        // récupérer les messages via l'ID de l'user
       //  find all messages from the user
       $user =  $userRepository->findoneBy([
-            'id' => $id
             
+            'id' => $id
     
         ]);
 
         // return json content
         return $this->json200($messagesRepository->findAll(
             [
-                
+        
             
             ]
 
         ),  [
       "groups" => 'message_browse', 'user_browse'
+     
+     ]);
+    }
+
+      /** show all received
+     * @Route("/api/{id}/messages", name="browse_messages", methods={"GET"})
+     */
+    public function browseoneMessage($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
+    {
+
+        // todo : ce que je veux faire 
+        // récupérer les messages via l'ID de l'user
+      //  find message by user
+      $user =  $userRepository->find($id);
+
+        // return json content
+        return $this->json200($messagesRepository->find($id),  [
+      "groups" => 'message_browse', 'user_read'
      
      ]);
     }
@@ -87,7 +108,8 @@ class MessagesController extends ApiController
             // list of groups to use
             "groups" => 'message_browse',
          
-            'user_browse'
+            'user_browse',
+            'message_read'
 
         ]
     );

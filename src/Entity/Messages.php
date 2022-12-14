@@ -52,14 +52,14 @@ class Messages
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
-     * 
+     * @Groups({"message_browse"})
      * 
      */
     private $sender;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
-     * 
+     * @Groups({"message_browse"})
      * 
      */
     private $receiver;
