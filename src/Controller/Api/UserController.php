@@ -39,7 +39,7 @@ class UserController extends AbstractController
 
         //Call api in form-data with key image which have image file
         $file = $request->files->all()["file"];
-      
+
         $image = new Image();
         $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
             ->setMime($file->getClientMimeType())
@@ -54,7 +54,7 @@ class UserController extends AbstractController
             [],
             [
                 // list of groups to use
-                "groups" => 'user_browse', 'user_skill'
+                "groups" => 'user_browse', 'user_skill', 'advertisements_skill'
 
             ]
         );
@@ -68,9 +68,9 @@ class UserController extends AbstractController
      * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function addUser(UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
+    public function addUser(UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
-       
+
 
         $content = $request->getContent();
 
@@ -82,30 +82,36 @@ class UserController extends AbstractController
                     $content,
                     User::class,
                     'json'
-                );}
-                else {
-                    /** @var UploadedFile $uploadedFile */
-                  
-                    $uploadedFile = $request->files;
-                    dd($uploadedFile);
-                }
-     
-                $user = $serializerInterface->deserialize(
-                    $content,
-                    User::class,
-                    'json'
                 );
+            }
+           if ($uploadedFile = $request->files->all()['fileName']) {
+             
+                dd( $serializerInterface);
+
+                
+               
+                $userRepository->reflFields->setImageName(pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME))
+                    ->setImageFile($uploadedFile);
+
+                $em->persist($user);
+                $em->flush();
+            }
+
+            $user = $serializerInterface->deserialize(
+                $content,
+                User::class,
+                'json'
+            );
             $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
             $hashedPassword = $passwordHasher->hashPassword(
                 $user,
                 $user->getPassword()
             );
 
-
-           
             $user->setPassword($hashedPassword);
             $user->setReference($this->referenceFormat());
             $user->setRoles(["ROLE_USER"]);
+            $user->setCreated(new DateTime());
 
 
             if ($user->setImageFile() === null) {
@@ -164,7 +170,8 @@ class UserController extends AbstractController
                 "groups" =>
                 [
                     "user_browse",
-                    'skill_browse' // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'advertisements_browse'
                 ]
             ]
         );
@@ -202,7 +209,8 @@ class UserController extends AbstractController
                 "groups" =>
                 [
                     "user_browse", // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                    'skill_browse' // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'skill_browse', // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'advertisements_browse'
                 ]
             ]
         );

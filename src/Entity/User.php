@@ -48,14 +48,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="json")
-     * @Groups({"user_browse"})
+     * 
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Groups({"user_browse"})
+     * 
      */
     private $password;
 
@@ -111,10 +111,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
          /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.
     * @Vich\UploadableField(mapping="image", fileNameProperty="imageName")
-     * @Groups({"user_browse"})
+     * 
      * @var File
      *
-     * @JMS\Exclude
      */
     private $imageFile;
 
@@ -134,6 +133,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
+    
      * 
      */
     private $advertisements;
@@ -143,6 +143,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
        /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
      * @Groups({"message_browse"})
+     *
      */
     private $sender;
 
@@ -212,7 +213,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->imageFile;
     }
 
-    public function setImageName(?string $imageName): void
+    public function setImageName(?string $imageName)
     {
         $this->imageName = $imageName;
     }
