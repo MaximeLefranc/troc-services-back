@@ -34,6 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * 
      * @Groups({"user_browse"})
+     * @Groups({"user_read_message"})
      * 
      */
     private $id;
@@ -104,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user_browse"})
-     * 
+     * @Groups({"user_read_message"})
      */
     private $nickname;
 
@@ -146,13 +147,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
        /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
-     * @Groups({"message_browse"})
+     * 
      */
     private $sender;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="receiver", orphanRemoval=true)
-     * @Groups({"message_browse"})
+     * 
      */
     private $receiver;
 

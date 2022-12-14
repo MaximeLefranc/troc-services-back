@@ -39,6 +39,21 @@ class MessagesRepository extends ServiceEntityRepository
         }
     }
 
+    public function findMessagesByReceiver(): array
+    {
+        //1. donner l'alias de l'objet
+        return $this->createQueryBuilder('m, u')
+            // filtrer par receiver
+            ->andWhere("m.receiver = u.id" )
+            // trier par date de réception
+            ->orderBy("m.sendAt", "DESC")
+            // limiter le nombre de résultats
+           
+            // on récupère la requete, puis les résultats
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Messages[] Returns an array of Messages objects
 //     */

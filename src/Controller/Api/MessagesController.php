@@ -24,17 +24,20 @@ class MessagesController extends ApiController
       //  find all messages from the user
       $user =  $userRepository->findoneBy([
             'id' => $id
+            
+    
         ]);
 
         // return json content
-        return $this->json200($messagesRepository->findAll(
+        return $this->json200($messagesRepository->findMessagesByReceiver(
             [
-                'id' => $user->getId()
+                
+                'receiver' => $user->getReceiver()
             ]
 
         ), [
       "groups" => 'message_browse', 
-      'user_browse'
+      'user_read_message'
      
     ]);
     }
