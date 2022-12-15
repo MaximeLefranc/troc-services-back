@@ -6,7 +6,6 @@ use App\Entity\Image;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,9 +22,10 @@ use DateTime;
  * @Route("/api/user")
  */
 
-class UserController extends AbstractController
-{
-  
+
+class UserController extends ApiController
+{   
+    
 
     /**
      * @Route("/register", name="api_create_user", methods={"POST"})

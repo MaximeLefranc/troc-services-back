@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advertisements index{% endblock %}
+
+{% block body %}
+    <h1>Advertisements index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>ImageName</th>
+                <th>CreatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for advertisement in advertisements %}
+        {% if advertisement.approved == false %}
+            <tr>
+                <td>{{ advertisement.id }}</td>
+                <td>{{ advertisement.title }}</td>
+                <td>{{ advertisement.content }}</td>
+                <td>{{ advertisement.imageName }}</td>
+                <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('read_advertisement_moderation', {'id': advertisement.id}) }}">show</a>
+                    <a href="#">Approve</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+<a href="{{ path('moderation_advertisements') }}">back to list</a>
+{% endblock %}
