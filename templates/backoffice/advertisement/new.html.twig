@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Advertisements{% endblock %}
+
+{% block body %}
+    <h1>Create new Advertisements</h1>
+
+    {{ include('backoffice/advertisement/_form.html.twig') }}
+
+    <a href="{{ path('backoffice_advertisements') }}">back to list</a>
+{% endblock %}
