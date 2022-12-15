@@ -181,11 +181,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updated;
 
+  
+
+ 
     public function __construct()
     {
         $this->advertisements = new ArrayCollection();
         $this->message = new ArrayCollection();
         $this->skill = new ArrayCollection();
+        $this->imageProfile = new ArrayCollection();
+    
     }
 
     /**
@@ -569,4 +574,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    
+
 }

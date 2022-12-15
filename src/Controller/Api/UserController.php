@@ -25,40 +25,7 @@ use DateTime;
 
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/registerfile", name="api_add_image", methods={"POST"})
-     * @throws JsonException 
-     * @throws \Doctrine\DBAL\Exception
-     * @throws Exception
-     */
-    public function addImage(Request $request, EntityManagerInterface $em, User $user)
-    {
-        //Call api in form-data with key image which have image file
-
-
-
-        //Call api in form-data with key image which have image file
-        $file = $request->files->all()["file"];
-
-        $image = new Image();
-        $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
-            ->setMime($file->getClientMimeType())
-            ->setCreatedAt(new \Datetime('now'))
-            ->setTargetImageFile($file);
-        $em->persist($image);
-        $em->flush();
-
-        return $this->json(
-            $image,
-            Response::HTTP_CREATED,
-            [],
-            [
-                // list of groups to use
-                "groups" => 'user_browse', 'user_skill', 'advertisements_skill'
-
-            ]
-        );
-    }
+  
 
     /**
      * @Route("/register", name="api_create_user", methods={"POST"})
@@ -77,55 +44,53 @@ class UserController extends AbstractController
 
 
         try {
-            if ($request->headers->get('Content-Type') === 'application/json') {
+          //  $request->headers->get('Content-Type') === 'application/json' :
                 $user = $serializerInterface->deserialize(
                     $content,
                     User::class,
                     'json'
                 );
-            }
-           if ($uploadedFile = $request->files->all()['fileName']) {
-             
-                dd( $serializerInterface);
+           
+                $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $user->getPassword()
+                );
+    
+                $user->setPassword($hashedPassword);
+                $user->setReference($this->referenceFormat());
+                $user->setRoles(["ROLE_USER"]);
+                $user->setCreated(new DateTime());
+    
+    
+                if ($user->setImageFile() === null) {
+                    $user->setImageName('https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png');
+                }
+    
+                $errors = $validatorInterface->validate($user);
+    
+                if (count($errors) > 0) {
+                    return $this->json($errors, 400);
+                }
+    
+             //   $file = $request->files->all()["target_image_file"];
 
-                
-               
-                $userRepository->reflFields->setImageName(pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME))
-                    ->setImageFile($uploadedFile);
+               // $image = new Image();
+              //  $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+              //  $image->setMime($file->getClientMimeType());
+              //  $image->setCreatedAt(new \Datetime('now'));
+              //  $image->setTargetImageFile($file);
+              //  $image->setUser($user->setId());
+              //  $em->persist($image);
+              //  $em->flush();
+        
 
                 $em->persist($user);
+              //  $em->persist($image);
                 $em->flush();
-            }
+            
 
-            $user = $serializerInterface->deserialize(
-                $content,
-                User::class,
-                'json'
-            );
-            $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
-            $hashedPassword = $passwordHasher->hashPassword(
-                $user,
-                $user->getPassword()
-            );
-
-            $user->setPassword($hashedPassword);
-            $user->setReference($this->referenceFormat());
-            $user->setRoles(["ROLE_USER"]);
-            $user->setCreated(new DateTime());
-
-
-            if ($user->setImageFile() === null) {
-                $user->setImageName('https://images.pexels.com/photos/1178498/pexels-photo-1178498.jpeg');
-            }
-
-            $errors = $validatorInterface->validate($user);
-
-            if (count($errors) > 0) {
-                return $this->json($errors, 400);
-            }
-
-            $em->persist($user);
-            $em->flush();
+           
         } catch (NotEncodableValueException $e) {
             return $this->json([
                 'status' => '400',
