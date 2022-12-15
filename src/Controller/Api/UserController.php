@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -21,6 +22,7 @@ use DateTime;
  * @Route("/api/user")
  */
 
+
 class UserController extends ApiController
 {   
     
@@ -33,65 +35,85 @@ class UserController extends ApiController
      * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function addUser(UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
+    public function addUser(UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
-        
+
 
         $content = $request->getContent();
 
+
+
+        try {
+          //  $request->headers->get('Content-Type') === 'application/json' :
+                $user = $serializerInterface->deserialize(
+                    $content,
+                    User::class,
+                    'json'
+                );
+           
+                $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+                $hashedPassword = $passwordHasher->hashPassword(
+                    $user,
+                    $user->getPassword()
+                );
+    
+                $user->setPassword($hashedPassword);
+                $user->setReference($this->referenceFormat());
+                $user->setRoles(["ROLE_USER"]);
+                $user->setCreated(new DateTime());
+    
+    
+                if ($user->setImageFile() === null) {
+                    $user->setImageName('https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png');
+                }
+    
+                $errors = $validatorInterface->validate($user);
+    
+                if (count($errors) > 0) {
+                    return $this->json($errors, 400);
+                }
+    
+             //   $file = $request->files->all()["target_image_file"];
+
+               // $image = new Image();
+              //  $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
+              //  $image->setMime($file->getClientMimeType());
+              //  $image->setCreatedAt(new \Datetime('now'));
+              //  $image->setTargetImageFile($file);
+              //  $image->setUser($user->setId());
+              //  $em->persist($image);
+              //  $em->flush();
         
 
-        try{
-        $user = $serializerInterface->deserialize($content, User::class, 'json');
-        
-        $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
-        $hashedPassword = $passwordHasher->hashPassword(
-            $user,$user->getPassword()
+                $em->persist($user);
+              //  $em->persist($image);
+                $em->flush();
+            
+
+           
+        } catch (NotEncodableValueException $e) {
+            return $this->json([
+                'status' => '400',
+                'message' => $e->getMessage()
+            ], 400);
+        }
+
+        return $this->json(
+            $user,
+            Response::HTTP_CREATED,
+            [],
+            [
+                // list of groups to use
+                "groups" => 'user_browse', 'user_skill'
+
+            ]
         );
-        $user->setPassword($hashedPassword);
-        $user->setReference($this->referenceFormat());
-        $user->setCreated(new \DateTime());
-      
-        if($user->getRoles()=== null){
-            $user->setRoles(["ROLE_USER"]);
-
-        }
-
-        if($user->setImageFile() === null ){
-            $user->setImageName('https://images.pexels.com/photos/1178498/pexels-photo-1178498.jpeg');
-        
-        }
-
-        $errors = $validatorInterface->validate($user);
-
-        if(count($errors)> 0){
-            return $this->json($errors, 400);
-        }
-
-        $em->persist($user);
-        $em->flush();
-        } 
-        catch (NotEncodableValueException $e)
-        {
-       return $this->json([
-           'status' => '400',
-           'message' => $e->getMessage()
-       ],400);}
-
-        return $this->json( $user,
-        Response::HTTP_CREATED,
-        [],
-        [
-            // list of groups to use
-            "groups" => 'user_browse', 'user_skill'
-
-        ]);
     }
 
 
     public function referenceFormat()
     {
-        return 'REP'.substr(date('Y'), 2).date('md').uniqid();
+        return 'REP' . substr(date('Y'), 2) . date('md') . uniqid();
     }
 
 
@@ -110,10 +132,11 @@ class UserController extends ApiController
             [],
             // c'est ici que je fournis les groupes de serialisation
             [
-                "groups" => 
+                "groups" =>
                 [
                     "user_browse",
-                    'skill_browse' // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'advertisements_browse'
                 ]
             ]
         );
@@ -126,12 +149,12 @@ class UserController extends ApiController
      */
     public function read(User $user = null): JsonResponse // POUR CETTE ROUTE, ON DOIT ENVOYER UN ID?? oui
     {
-        if ($user === null){
+        if ($user === null) {
 
             return $this->json(
                 // les données ne sont pas obligatoirement des Entités
                 [
-                    "erreur" => "utilisateur introuvable" 
+                    "erreur" => "utilisateur introuvable"
                 ],
                 // le code HTTP 404
                 Response::HTTP_NOT_FOUND,
@@ -148,10 +171,11 @@ class UserController extends ApiController
             [],
             // c'est ici que je fournis les groupes de serialisation
             [
-                "groups" => 
+                "groups" =>
                 [
                     "user_browse", // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                    'skill_browse' // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'skill_browse', // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'advertisements_browse'
                 ]
             ]
         );
@@ -182,7 +206,7 @@ class UserController extends ApiController
      */
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
         }
 
