@@ -17,6 +17,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use DateTime;
+use Exception;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/api/user")
@@ -25,7 +27,28 @@ use DateTime;
 
 class UserController extends ApiController
 {   
-    
+     /**
+   * @Route("/upload/{id}", name="image_upload", methods={"POST"})
+   */
+  public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
+  {
+
+
+    $user = $userRepository->find($id);
+    $image = $request->files->get('file');
+    $imageName = uniqid() . '_' . $image->getClientOriginalName();
+    $image->move($parameterBag->get('public') . '/img', $imageName);
+
+    $user->setImageName($imageName);
+
+
+    $entityManagerInterface->persist($user);
+    $entityManagerInterface->flush();
+
+    return $this->json([
+        'message' => 'Image uploaded successfully.'
+    ]);
+  }
 
     /**
      * @Route("/register", name="api_create_user", methods={"POST"})
@@ -35,80 +58,50 @@ class UserController extends ApiController
      * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function addUser(UserPasswordHasherInterface $passwordHasher, UserRepository $userRepository, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
-    {
-
-
-        $content = $request->getContent();
-
-
-
-        try {
-          //  $request->headers->get('Content-Type') === 'application/json' :
-                $user = $serializerInterface->deserialize(
-                    $content,
-                    User::class,
-                    'json'
-                );
-           
-                $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $user->getPassword()
-                );
+    public function createUser(ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
+  {
     
-                $user->setPassword($hashedPassword);
-                $user->setReference($this->referenceFormat());
-                $user->setRoles(["ROLE_USER"]);
-                $user->setCreated(new DateTime());
-    
-    
-                if ($user->setImageFile() === null) {
-                    $user->setImageName('https://cdn.pixabay.com/photo/2014/04/02/10/25/man-303792_960_720.png');
-                }
-    
-                $errors = $validatorInterface->validate($user);
-    
-                if (count($errors) > 0) {
-                    return $this->json($errors, 400);
-                }
-    
-             //   $file = $request->files->all()["target_image_file"];
+    $jsonContent = $request->getContent();
 
-               // $image = new Image();
-              //  $image->setName(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-              //  $image->setMime($file->getClientMimeType());
-              //  $image->setCreatedAt(new \Datetime('now'));
-              //  $image->setTargetImageFile($file);
-              //  $image->setUser($user->setId());
-              //  $em->persist($image);
-              //  $em->flush();
-        
 
-                $em->persist($user);
-              //  $em->persist($image);
-                $em->flush();
-            
+    try {
+        $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
 
-           
-        } catch (NotEncodableValueException $e) {
-            return $this->json([
-                'status' => '400',
-                'message' => $e->getMessage()
-            ], 400);
+
+        $newUser->setUsername($newUser->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+        $hashedPassword = $passwordHasher->hashPassword(
+            $newUser,
+            $newUser->getPassword()
+        );
+        $newUser->setPassword($hashedPassword)
+        ->setReference($this->referenceFormat())
+        ->setRoles(["ROLE_USER"])
+        ->setCreated(new DateTime());
+
+        if ($newUser->setImageFile() === null) {
+            $newUser->setImageName('photo-profil.webp');
         }
 
-        return $this->json(
-            $user,
-            Response::HTTP_CREATED,
-            [],
-            [
-                // list of groups to use
-                "groups" => 'user_browse', 'user_skill'
+        $errors = $validatorInterface->validate($newUser);
 
-            ]
+        if (count($errors) > 0) {
+            return $this->json($errors, 400);
+        }
+    } catch (Exception $e) {
+        return $this->json(
+            "JSON mal formé",
+            Response::HTTP_BAD_REQUEST
         );
     }
+
+    $entityManagerInterface->persist($newUser);
+    $entityManagerInterface->flush();
+
+    return $this->json([
+      'newUserId' => $newUser->getId()
+    ]);
+  }
+    
 
 
     public function referenceFormat()
