@@ -3,31 +3,34 @@
 {% block title %}Advertisements index{% endblock %}
 
 {% block body %}
-    <h1>Advertisements index</h1>
+    <h1 style="text-align:center">Modération des annonces</h1>
+
+  <h2>Listes des annonces à valider</h2>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>ImageName</th>
-                <th>CreatedAt</th>
+                <th>Titre</th>
+                <th>Contenu de l'annonce</th>
+                <th>Image</th>
+                <th>Date de création</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for advertisement in advertisements %}
-        {% if advertisement.approved == false %}
-            <tr>
+        {% if advertisement.approved == false  %}
+            <tr style="width:20%">
                 <td>{{ advertisement.id }}</td>
                 <td>{{ advertisement.title }}</td>
-                <td>{{ advertisement.content }}</td>
-                <td>{{ advertisement.imageName }}</td>
-                <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('read_advertisement_moderation', {'id': advertisement.id}) }}">show</a>
-                    <a href="#">Approve</a>
+                <td>{{ advertisement.content|slice(0, 70) ~ '...' }}</td>
+          <td><img src="{{ advertisement.imageName }}" alt="Example" style="width:20%; height:10%"/></td>
+                <td style="width:20%">{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td style="width:20%">
+                    <a href="{{ path('read_advertisement_moderation', {'id': advertisement.id}) }}" class="btn btn-info">voir</a>
+                    <a href="{{ path('approve_advertisement', {'id': advertisement.id}) }}" class="btn btn-success">approuver</a>
+                    <a href="{{ path('refuse_advertisement', {'id': advertisement.id}) }}" class="btn btn-danger">refuser</a>
                 </td>
             </tr>
         {% else %}
@@ -38,5 +41,5 @@
         {% endfor %}
         </tbody>
     </table>
-<a href="{{ path('moderation_advertisements') }}">back to list</a>
+<a href="{{ path('backoffice_advertisements') }}" class="btn btn-info">Retourner à la liste des annonces</a>
 {% endblock %}

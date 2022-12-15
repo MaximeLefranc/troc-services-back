@@ -52,6 +52,18 @@ class AdvertisementsRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAdvertToModerate()
+    {
+  
+       return $this->createQueryBuilder('a')
+            ->andWhere('a.approved = false')
+            ->andWhere('a.isHidden = false')
+        
+
+            ->getQuery()
+            ->getResult();
+    }
 //    /**
 //     * @return Advertisements[] Returns an array of Advertisements objects
 //     */
