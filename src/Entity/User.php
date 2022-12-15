@@ -34,6 +34,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="integer")
      * 
      * @Groups({"user_browse"})
+     * @Groups({"user_read"})
      * 
      */
     private $id;
@@ -104,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user_browse"})
-     * 
+     * @Groups({"user_read"})
      */
     private $nickname;
 
@@ -140,16 +141,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
    
 
-       /**
+     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
-     * @Groups({"message_browse"})
-     *
+
+     * @Groups({"users_browse"})
+
      */
     private $sender;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="receiver", orphanRemoval=true)
-     * @Groups({"message_browse"})
+     * @Groups({"users_browse"})
      */
     private $receiver;
 
@@ -181,9 +183,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updated;
 
-  
 
- 
     public function __construct()
     {
         $this->advertisements = new ArrayCollection();
@@ -228,7 +228,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->imageName;
     }
 
- 
+
 
     public function getId(): ?int
     {
@@ -575,6 +575,5 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
 
 }
