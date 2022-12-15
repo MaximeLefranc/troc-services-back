@@ -16,15 +16,12 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MessagesController extends ApiController
 {
-    /** show all received
+    /** show all received messages
      * @Route("/api/user/{id}/messages", name="browse_messages", methods={"GET"})
      */
     public function browseMessageById($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
     {
 
-        // todo : ce que je veux faire 
-        // récupérer les messages via l'ID de l'user
-      //  find all messages from the user
       $user =  $userRepository->findoneBy([
             
             'id' => $id
@@ -32,9 +29,9 @@ class MessagesController extends ApiController
         ]);
 
         // return json content
-        return $this->json200($messagesRepository->findAll(
+        return $this->json200($messagesRepository->findMessagesByReceiver(
             [
-        
+                'id' => $user->getId()
             
             ]
 
@@ -44,32 +41,16 @@ class MessagesController extends ApiController
      ]);
     }
 
-      /** show all received
-     * @Route("/api/{id}/messages", name="browse_messages", methods={"GET"})
-     */
-    public function browseoneMessage($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
-    {
-
-        // todo : ce que je veux faire 
-        // récupérer les messages via l'ID de l'user
-      //  find message by user
-      $user =  $userRepository->find($id);
-
-        // return json content
-        return $this->json200($messagesRepository->find($id),  [
-      "groups" => 'message_browse', 'user_read'
-     
-     ]);
-    }
+  
 
     /** send a message
      * @Route("/api/user/{id<\d+>}/messages/send", name="send_message", methods={"POST"})
      */
     public function sendMessage(Request $request, SerializerInterface $serializerInterface, ValidatorInterface $validatorInterface,
-    EntityManagerInterface $em)
+    EntityManagerInterface $em, UserRepository $userRepository, $id)
     {
         $content = $request->getContent();
-        
+  
 
         try{
             $message = $serializerInterface->deserialize($content, Messages::class, 'json');
@@ -77,8 +58,9 @@ class MessagesController extends ApiController
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $message->setSentAt($date);
-            $message->setSender($this->getUser()); //add the sender of the message to the db
-    
+            $message->setSender($this->getUser($id)); //add the sender of the message to the db
+            $message->setIsRead(false);
+            $message->setIsHidden(false);
 
     $errors = $validatorInterface->validate($message);
 
@@ -115,26 +97,31 @@ class MessagesController extends ApiController
     );
 }
     /** show messages sent
-     * @Route("/api/messages/sent", name="sent_messages", methods={"GET"})
+     * @Route("/api/user/{id<\d+>}/messages/sent", name="sent_messages", methods={"GET"})
      */
-    public function sentMessagesById(MessagesRepository $messagesRepository, UserRepository $userRepository, $id)
-    {
-       // find all messages from the user
-      $user =  $userRepository->findoneBy([
-            'id' => $id
-        ]);
-
-        // return json content
-        return $this->json200($messagesRepository->findBy(
-            [
-                'user' => $user->getId()
-            ]
-
-        ), [
-      "groups" => 'message_browse',
-      'user_browse'
-     
-    ]);
+  
+        public function findMessagesSent($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
+        {
+    
+          $user =  $userRepository->findoneBy([
+                
+                'id' => $id
+        
+            ]);
+    
+            // return json content
+            return $this->json200($messagesRepository->findMessagesBySender(
+                [
+                    'id' => $user->getId()
+                
+                ]
+    
+            ),  [
+          "groups" => 'message_browse', 'user_browse'
+         
+         ]);
+        
+    
     }
 
        /** delete message from messagery

@@ -72,6 +72,11 @@ class Messages
      */
     private $receiver;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $object;
+
     
 
     public function __construct()
@@ -153,6 +158,18 @@ class Messages
     public function setReceiver(?User $receiver): self
     {
         $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    public function getObject(): ?string
+    {
+        return $this->object;
+    }
+
+    public function setObject(string $object): self
+    {
+        $this->object = $object;
 
         return $this;
     }
