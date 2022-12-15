@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Fresh\VichUploaderSerializationBundle\Annotation as Fresh;
-use JMS\Serializer\Annotation as JMS;
+
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
@@ -57,8 +57,7 @@ class Advertisements
      * @Groups({"advertisements_browse"})
      * 
      * @var File
-     *
-     * @JMS\Exclude
+
      *
      * @Vich\UploadableField(mapping="picture", fileNameProperty="imageName")
      *
@@ -69,8 +68,6 @@ class Advertisements
      * @ORM\Column(type="string")
      * @Groups({"advertisements_browse"})
      * 
-     * @JMS\Expose
-     * @JMS\SerializedName("photo")
      * 
      * @Fresh\VichSerializableField("imageFile")
      * 
@@ -119,7 +116,7 @@ class Advertisements
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"user_browse"})
+     * @Groups({"advertisements_browse"})
      * 
      * 
      */

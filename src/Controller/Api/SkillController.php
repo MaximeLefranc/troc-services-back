@@ -5,7 +5,6 @@ namespace App\Controller\Api;
 use App\Entity\Skill;
 use App\Form\SkillType;
 use App\Repository\SkillRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/api/skill")
  */
-class SkillController extends AbstractController
+class SkillController extends ApiController
 {
     /**
      * @Route("/", name="api_browse_skills", methods={"GET"})
