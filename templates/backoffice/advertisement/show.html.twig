@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advertisements{% endblock %}
+
+{% block body %}
+    <h1>Advertisements</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ advertisement.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ advertisement.title }}</td>
+            </tr>
+            <tr>
+                <th>Content</th>
+                <td>{{ advertisement.content }}</td>
+            </tr>
+            <tr>
+                <th>Approved</th>
+                <td>{{ advertisement.approved ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>ImageName</th>
+                <td>{{ advertisement.imageName }}</td>
+            </tr>
+            <tr>
+                <th>IsHidden</th>
+                <td>{{ advertisement.isHidden ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>UpdatedAt</th>
+                <td>{{ advertisement.updatedAt ? advertisement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('backoffice_advertisements') }}">back to list</a>
+
+    <a href="{{ path('edit_advertisement', {'id': advertisement.id}) }}">edit</a>
+
+    {{ include('backoffice/advertisement/_delete_form.html.twig') }}
+{% endblock %}

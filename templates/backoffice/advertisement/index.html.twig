@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Advertisements index{% endblock %}
+
+{% block body %}
+    <h1>Advertisements index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Approved</th>
+                <th>ImageName</th>
+                <th>IsHidden</th>
+                <th>CreatedAt</th>
+                <th>UpdatedAt</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for advertisement in advertisements %}
+            <tr>
+                <td>{{ advertisement.id }}</td>
+                <td>{{ advertisement.title }}</td>
+                <td>{{ advertisement.content }}</td>
+                <td>{{ advertisement.approved ? 'Yes' : 'No' }}</td>
+                <td>{{ advertisement.imageName }}</td>
+                <td>{{ advertisement.isHidden ? 'Yes' : 'No' }}</td>
+                <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ advertisement.updatedAt ? advertisement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('read_advertisement', {'id': advertisement.id}) }}">show</a>
+                    <a href="{{ path('edit_advertisement', {'id': advertisement.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('add_advertisement') }}">Create new</a>
+{% endblock %}
