@@ -8,6 +8,7 @@ use DateTime;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,24 +21,28 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class AdvertisementsController extends ApiController
 {
     /**
-     * @Route("/api/advertisements", name="browse_advertisements", methods={"GET"})
+     * @Route("/api/advertisements/upload/{id}", name="image_upload_advertisement", methods={"POST"})
      */
-    public function browseAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface)
+    public function uploadImage($id, AdvertisementsRepository $advertisementsRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
     {
+        $ad = $advertisementsRepository->find($id);
+        $image = $request->files->get('file');
+        $imageName = uniqid() . '_' . $image->getClientOriginalName();
+        $image->move($parameterBag->get('public') . '/img', $imageName);
 
+        $ad->setImageName($imageName);
+     
+        $entityManagerInterface->persist($ad);
+        $entityManagerInterface->flush();
 
-        return $this->json200($advertisementsRepository->findAllOrderByCreation(), [
-            "groups" => 
-            'advertisements_browse',
-            'category_browse',
-            'skill_browse',
-            'user_browse'
-        
-        ]);
+        return $this->json([
+            'message' => 'Image uploaded successfully.'
+        ],
+    Response::HTTP_CREATED);
     }
 
     /**
-     * @Route("/api/advertisements", name="add_advertisement", methods={"POST"})
+     * @Route("/api/advertisements/add", name="add_advertisement", methods={"POST"})
      */
     public function addAdvertisement(
 
@@ -57,47 +62,51 @@ class AdvertisementsController extends ApiController
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $ad->setCreatedAt($date);
-               if($ad->setImageFile() === null ){
-                   $ad->setImageName('https://images.pexels.com/photos/1178498/pexels-photo-1178498.jpeg');
-                   $ad->setImageSize(0);
-               }
-               
-
-
-
+            if ($ad->setImageName() === null) {
+                $ad->setImageName('image-advert.jpeg');
+            }
 
             $errors = $validatorInterface->validate($ad);
 
-            if (count($errors) > 0) {
+            if (count($errors) > 0) 
+            {
                 return $this->json($errors, 400);
             }
 
-            $em->persist($ad);
-
-            $em->flush();
+           
         } catch (NotEncodableValueException $e) {
             return $this->json([
                 'status' => '400',
                 'message' => $e->getMessage()
             ], 400);
         }
-
+        $em->persist($ad);
+        $em->flush();
         //return the correct http response
 
-        return $this->json(
-            $ad,
-            Response::HTTP_CREATED,
+        return $this->json([
+            'newAdvertId' => $ad->getId()], 
+            Response::HTTP_CREATED
 
-            [],
-            [
-                // list of groups to use
-                "groups" => 'advertisements_browse',
-                "category_browse",
-                'skill_browse',
-                'user_browse'
-
-            ]
+    
         );
+    }
+
+     /**
+     * @Route("/api/advertisements", name="browse_advertisements", methods={"GET"})
+     */
+    public function browseAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface)
+    {
+
+
+        return $this->json200($advertisementsRepository->findAllOrderByCreation(), [
+            "groups" =>
+            'advertisements_browse',
+            'category_browse',
+            'skill_browse',
+            'user_browse'
+
+        ]);
     }
 
     /**
@@ -207,8 +216,4 @@ class AdvertisementsController extends ApiController
             ]
         );
     }
-
-
-
-   
 }

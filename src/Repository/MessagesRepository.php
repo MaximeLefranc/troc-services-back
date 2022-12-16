@@ -39,6 +39,29 @@ class MessagesRepository extends ServiceEntityRepository
         }
     }
 
+    public function findMessagesByReceiver($id)
+    {
+  
+       return $this->createQueryBuilder('m')
+            ->andWhere('m.receiver = :user_id')
+            ->setParameter('user_id', $id)
+
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findMessagesBySender($id)
+    {
+  
+       return $this->createQueryBuilder('m')
+            ->andWhere('m.sender = :user_id')
+            ->setParameter('user_id', $id)
+
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Messages[] Returns an array of Messages objects
 //     */

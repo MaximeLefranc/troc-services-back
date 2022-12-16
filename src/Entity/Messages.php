@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MessagesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -17,6 +19,7 @@ class Messages
      * @ORM\Column(type="integer")
      * 
      * @Groups({"message_browse"})
+     * @Groups({"message_read"})
      */
     private $id;
 
@@ -24,6 +27,7 @@ class Messages
      * @ORM\Column(type="text")
      *
      * @Groups({"message_browse"})
+     * @Groups({"message_read"})
      */
     private $content;
 
@@ -31,6 +35,7 @@ class Messages
      * @ORM\Column(type="datetime")
      * 
      * @Groups({"message_browse"})
+     * @Groups({"message_read"})
      */
     private $sentAt;
 
@@ -39,26 +44,45 @@ class Messages
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"message_browse"})
+     * @Groups({"message_read"})
      */
     private $isRead = false;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"message_browse"})
+     * @Groups({"message_read"})
      */
     private $isHidden = false;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
+     * @Groups({"message_browse"})
+     * 
      * 
      */
     private $sender;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
+     * @Groups({"message_browse"})
+     * 
+     * 
      * 
      */
     private $receiver;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $object;
+
+    
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -137,4 +161,18 @@ class Messages
 
         return $this;
     }
+
+    public function getObject(): ?string
+    {
+        return $this->object;
+    }
+
+    public function setObject(string $object): self
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
+   
 }

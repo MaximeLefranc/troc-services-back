@@ -2,6 +2,7 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Image;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Repository\UserRepository;
@@ -16,14 +17,37 @@ use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use DateTime;
+use Exception;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * @Route("/api/user")
  */
 
+
 class UserController extends ApiController
 {   
-    
+     /**
+   * @Route("/upload/{id}", name="image_upload", methods={"POST"})
+   */
+  public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
+  {
+
+    $user = $userRepository->find($id);
+    $image = $request->files->get('file');
+    $imageName = uniqid() . '_' . $image->getClientOriginalName();
+    $image->move($parameterBag->get('public') . '/img', $imageName);
+
+    $user->setImageName($imageName);
+
+
+    $entityManagerInterface->persist($user);
+    $entityManagerInterface->flush();
+
+    return $this->json([
+        'message' => 'Image uploaded successfully.'
+    ]);
+  }
 
     /**
      * @Route("/register", name="api_create_user", methods={"POST"})
@@ -33,40 +57,48 @@ class UserController extends ApiController
      * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordHasherInterface $passwordHasher
      */
-    public function addUser(UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
-    {
-        
 
-        $content = $request->getContent();
+    public function createUser(ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
+  {
+    
+    $jsonContent = $request->getContent();
 
-        
+
+
+    try {
+        $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
+
 
         try{
         $user = $serializerInterface->deserialize($content, User::class, 'json');
         $user->setEmail($user->getEmail());
         $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+
         $hashedPassword = $passwordHasher->hashPassword(
-            $user,$user->getPassword()
+            $newUser,
+            $newUser->getPassword()
         );
-        $user->setPassword($hashedPassword);
-        $user->setReference($this->referenceFormat());
-        $user->setCreated(new \DateTime());
-      
-        if($user->getRoles()=== null){
-            $user->setRoles(["ROLE_USER"]);
+        $newUser->setPassword($hashedPassword)
+        ->setReference($this->referenceFormat())
+        ->setRoles(["ROLE_USER"])
+        ->setCreated(new DateTime());
 
+        if ($newUser->setImageFile() === null) {
+            $newUser->setImageName('photo-profil.webp');
         }
 
-        if($user->setImageFile() === null ){
-            $user->setImageName('https://images.pexels.com/photos/1178498/pexels-photo-1178498.jpeg');
-        
-        }
+        $errors = $validatorInterface->validate($newUser);
 
-        $errors = $validatorInterface->validate($user);
-
-        if(count($errors)> 0){
+        if (count($errors) > 0) {
             return $this->json($errors, 400);
         }
+    } catch (Exception $e) {
+        return $this->json(
+            "JSON mal formé",
+            Response::HTTP_BAD_REQUEST
+        );
+    }
+
 
         /*$email= $user->getEmail();
         $checkEmail= $userRepository->findByEmail($email);
@@ -94,13 +126,18 @@ class UserController extends ApiController
             // list of groups to use
             "groups" => 'user_browse', 'user_skill'
 
-        ]);
-    }
+
+    return $this->json([
+      'newUserId' => $newUser->getId()
+    ],
+    Response::HTTP_CREATED);
+  }
+    
 
 
     public function referenceFormat()
     {
-        return 'REP'.substr(date('Y'), 2).date('md').uniqid();
+        return 'REP' . substr(date('Y'), 2) . date('md') . uniqid();
     }
 
 
@@ -119,10 +156,14 @@ class UserController extends ApiController
             [],
             // c'est ici que je fournis les groupes de serialisation
             [
-                "groups" => 
+                "groups" =>
                 [
                     "user_browse",
-                    'skill_browse' // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+
+                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur,
+                    'message_browse',
+                    'advertisements_browse'
+
                 ]
             ]
         );
@@ -135,12 +176,12 @@ class UserController extends ApiController
      */
     public function read(User $user = null): JsonResponse // POUR CETTE ROUTE, ON DOIT ENVOYER UN ID?? oui
     {
-        if ($user === null){
+        if ($user === null) {
 
             return $this->json(
                 // les données ne sont pas obligatoirement des Entités
                 [
-                    "erreur" => "utilisateur introuvable" 
+                    "erreur" => "utilisateur introuvable"
                 ],
                 // le code HTTP 404
                 Response::HTTP_NOT_FOUND,
@@ -157,10 +198,18 @@ class UserController extends ApiController
             [],
             // c'est ici que je fournis les groupes de serialisation
             [
-                "groups" => 
+                "groups" =>
                 [
                     "user_browse", // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                    'skill_browse' // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+                    'skill_browse', // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
+
+                   
+                    'message_read',
+                    "users_browse",
+                    'advertisements_browse'
+                    
+                 
+
                 ]
             ]
         );
@@ -209,7 +258,7 @@ class UserController extends ApiController
      */
     public function delete(Request $request, User $user, UserRepository $userRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
         }
 
