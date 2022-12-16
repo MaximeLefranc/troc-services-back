@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends ApiController
 {
@@ -24,13 +25,16 @@ class AuthController extends ApiController
     /**
      * @Route("/api/login_check", name="api_login", methods={"POST"})
      * @param UserInterface $user
+     * @param User $users
      * @param JWTTokenManagerInterface $JWTManager
      * @return JsonResponse
      */
-    public function getTokenUser(UserInterface $user, JWTTokenManagerInterface $JWTManager, UserRepository $authUser): JsonResponse
+    public function getTokenUser(UserInterface $user, JWTTokenManagerInterface $JWTManager): JsonResponse
     {   
         
-        return new JsonResponse(['pseudo' => $authUser->getNickname(),'token' => $JWTManager->create($user)]);
+        
+        return new JsonResponse(['token' => $JWTManager->create($user)]);
+        
     }
 
 }
