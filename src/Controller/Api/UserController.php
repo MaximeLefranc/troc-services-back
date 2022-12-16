@@ -64,16 +64,11 @@ class UserController extends ApiController
     $jsonContent = $request->getContent();
 
 
-
     try {
         $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
 
 
-        try{
-        $user = $serializerInterface->deserialize($content, User::class, 'json');
-        $user->setEmail($user->getEmail());
-        $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
-
+        $newUser->setUsername($newUser->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
         $hashedPassword = $passwordHasher->hashPassword(
             $newUser,
             $newUser->getPassword()
@@ -99,7 +94,6 @@ class UserController extends ApiController
         );
     }
 
-
         /*$email= $user->getEmail();
         $checkEmail= $userRepository->findByEmail($email);
 
@@ -109,31 +103,18 @@ class UserController extends ApiController
 
         }*/
         // aouter ici le message d'erreur pour l'adresse mail qui existe deja, on check ça avec la fonction findByEmail
-        $em->persist($user);
-        $em->flush();
-        } 
-        catch (NotEncodableValueException $e)
-        {
-       return $this->json([
-           'status' => '400',
-           'message' => $e->getMessage()
-       ],400);}
-
-        return $this->json( $user,
-        Response::HTTP_CREATED,
-        [],
-        [
-            // list of groups to use
-            "groups" => 'user_browse', 'user_skill'
-
+    $entityManagerInterface->persist($newUser);
+    $entityManagerInterface->flush();
 
     return $this->json([
       'newUserId' => $newUser->getId()
     ],
     Response::HTTP_CREATED);
   }
-    
 
+
+    
+       
 
     public function referenceFormat()
     {
