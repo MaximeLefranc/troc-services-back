@@ -4,11 +4,12 @@ namespace App\Controller\Api;
 
 use App\Entity\Advertisements;
 use App\Repository\AdvertisementsRepository;
+use App\Repository\CategoriesRepository;
 use DateTime;
-
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -42,14 +43,18 @@ class AdvertisementsController extends ApiController
     }
 
     /**
-     * @Route("/api/advertisements/add", name="add_advertisement", methods={"POST"})
+     * @Route("/api/advertisements/add", name="add_advertisements", methods={"POST"})
      */
     public function addAdvertisement(
 
         SerializerInterface $serializerInterface,
         Request $request,
         ValidatorInterface $validatorInterface,
-        EntityManagerInterface $em
+        EntityManagerInterface $em, 
+        ParameterBagInterface $parameterBag
+    
+
+   
     ) {
 
         // retrieve the content by the class Request with the method getContent
@@ -58,13 +63,27 @@ class AdvertisementsController extends ApiController
         // Verify the JSON and deserialize the JSON content
         try {
             $ad = $serializerInterface->deserialize($content, Advertisements::class, 'json');
-
+        
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $ad->setCreatedAt($date);
-            if ($ad->setImageName() === null) {
-                $ad->setImageName('image-advert.jpeg');
+            $ad->setUser($this->getUser());
+            if ($request->files->get('file') != null)
+    
+                 {
+
+                    $image = $request->files->get('file');
+                    $imageName = uniqid() . '_' . $image->getClientOriginalName();
+                    $image->move($parameterBag->get('public') . '/img', $imageName);
+                
             }
+            else {$ad->setImageName('image-advert.jpeg');
+
+               
+            }
+
+          
+
 
             $errors = $validatorInterface->validate($ad);
 

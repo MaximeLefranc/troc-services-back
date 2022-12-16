@@ -100,7 +100,7 @@ class Advertisements
 
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements" )
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      * @Groups({"category_browse"})
      * 
      * 
