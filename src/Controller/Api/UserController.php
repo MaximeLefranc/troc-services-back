@@ -13,9 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use DateTime;
 use Exception;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -57,17 +57,23 @@ class UserController extends ApiController
      * @param EntityManagerInterface $entityManagerInterface
      * @param UserPasswordHasherInterface $passwordHasher
      */
+
     public function createUser(ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
   {
     
     $jsonContent = $request->getContent();
 
 
+
     try {
         $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
 
 
-        $newUser->setUsername($newUser->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+        try{
+        $user = $serializerInterface->deserialize($content, User::class, 'json');
+        $user->setEmail($user->getEmail());
+        $user->setUsername($user->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+
         $hashedPassword = $passwordHasher->hashPassword(
             $newUser,
             $newUser->getPassword()
@@ -93,8 +99,33 @@ class UserController extends ApiController
         );
     }
 
-    $entityManagerInterface->persist($newUser);
-    $entityManagerInterface->flush();
+
+        /*$email= $user->getEmail();
+        $checkEmail= $userRepository->findByEmail($email);
+
+        if($email== $checkEmail){
+
+            return $this->json('Cette adresse email est déja associée à un compte', 400);
+
+        }*/
+        // aouter ici le message d'erreur pour l'adresse mail qui existe deja, on check ça avec la fonction findByEmail
+        $em->persist($user);
+        $em->flush();
+        } 
+        catch (NotEncodableValueException $e)
+        {
+       return $this->json([
+           'status' => '400',
+           'message' => $e->getMessage()
+       ],400);}
+
+        return $this->json( $user,
+        Response::HTTP_CREATED,
+        [],
+        [
+            // list of groups to use
+            "groups" => 'user_browse', 'user_skill'
+
 
     return $this->json([
       'newUserId' => $newUser->getId()
@@ -187,21 +218,39 @@ class UserController extends ApiController
     /**
      * @Route("/{id}/edit", name="api_edit_user", methods={"GET", "POST"})
      */
-    public function edit(Request $request, User $user, UserRepository $userRepository): Response
+    public function edit(User $user, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        if ($user === null) {return $this->json404("Pas de membre pour cet ID");}
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $userRepository->add($user, true);
+        $content = $request->getContent();
 
-            return $this->redirectToRoute('app_a_p_i_user_index', [], Response::HTTP_SEE_OTHER);
-        }
+        
+        $serializerInterface->deserialize(
+            $content,
+            User::class,
+            'json',
+            //? avec le paramètre context, on précise l'objet à mettre à jour 
+            [AbstractNormalizer::OBJECT_TO_POPULATE => $user]
+        );// on met à jour la BDD
+        $user->setUpdated(new DateTime('now'));
+        $em->flush();
 
-        return $this->renderForm('api/user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+        // TODO : renvoyer l'information que tout c'est bien passé
+        return $this->json(
+            $user,
+            Response::HTTP_PARTIAL_CONTENT,
+            [
+                // proposition de redirection
+                "Location" => $this->generateUrl("api_read_user", ["id" => $user->getId()])
+            ],
+            // c'est ici que je fournis les groupes de serialisation
+            [
+                // list of groups to use
+                "groups" => ['user_browse']
+    
+            ]
+            
+        );
     }
 
     /**
