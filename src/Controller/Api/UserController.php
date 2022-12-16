@@ -33,7 +33,6 @@ class UserController extends ApiController
   public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
   {
 
-
     $user = $userRepository->find($id);
     $image = $request->files->get('file');
     $imageName = uniqid() . '_' . $image->getClientOriginalName();
@@ -99,7 +98,8 @@ class UserController extends ApiController
 
     return $this->json([
       'newUserId' => $newUser->getId()
-    ]);
+    ],
+    Response::HTTP_CREATED);
   }
     
 
