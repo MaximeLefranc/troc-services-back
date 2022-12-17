@@ -139,12 +139,10 @@ class UserController extends ApiController
             [
                 "groups" =>
                 [
-                    "user_browse",
-
-                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur,
-                    'message_browse',
-                    'advertisements_browse'
-
+                   'user_browse',
+                   'skill_browse',
+                   'category_browse'
+                   
                 ]
             ]
         );
@@ -181,13 +179,12 @@ class UserController extends ApiController
             [
                 "groups" =>
                 [
-                    "user_browse", // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                    'skill_browse', // préviser a nicolas que c'est skill browse et non skill read pour les advertisements
-
+                     // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                     'user_read', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                     'skill_browse', 
+                 
+                     'message_browse'
                    
-                    'message_read',
-                    "users_browse",
-                    'advertisements_browse'
                     
                  
 

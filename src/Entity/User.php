@@ -15,6 +15,7 @@ use Fresh\VichUploaderSerializationBundle\Annotation as Fresh;
 use JMS\Serializer\Annotation as JMS;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 
 /**
@@ -32,17 +33,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * 
      * @Groups({"user_browse"})
      * @Groups({"user_read"})
+     * @Groups({"advertisements_browse"})
+     * @Groups({"user_sender_receiver"})
+     * 
      * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"user_browse"})
      * 
+     * @Groups({"user_read"})
      * 
      */
     private $email;
@@ -50,55 +53,62 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      * 
+     * @Groups({"user_read"})
      */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * 
+     * @Groups({"user_read"})
      */
     private $password;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
+     * 
+     * @Groups({"user_read"})
      */
     private $first_name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
+     * 
+     * @Groups({"user_read"})
      */
     private $last_name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Groups({"user_browse"})
+     * @Groups({"user_read"})
+     * 
      */
     private $biography;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
+     * 
+     * @Groups({"user_read"})
+     * 
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"user_browse"})
+     * @Groups({"user_read"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=10)
-     * @Groups({"user_browse"})
+     * @Groups({"user_read"})
      */
     private $zip_code;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"user_browse"})
+     * @Groups({"user_read"})
      */
     private $birth_date;
 
@@ -106,6 +116,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"user_browse"})
      * @Groups({"user_read"})
+     * @Groups({"advertisements_browse"})
+    * @Groups({"user_sender_receiver"})
      */
     private $nickname;
 
@@ -120,9 +132,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string")
+     * 
      * @Groups({"user_browse"})
-     * @JMS\Expose
-     * @JMS\SerializedName("picture")
+     *@Groups({"user_read"})
+     
      * 
      * @Fresh\VichSerializableField("picture")
      * 
@@ -134,37 +147,39 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
-    
+     * 
+     * @Groups({"user_read"})
      * 
      */
     private $advertisements;
 
    
 
-     /**
+       /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="sender", orphanRemoval=true)
-
-     * @Groups({"users_browse"})
-
+     * 
+     *
      */
     private $sender;
 
     /**
      * @ORM\OneToMany(targetEntity=Messages::class, mappedBy="receiver", orphanRemoval=true)
-     * @Groups({"users_browse"})
+     * 
      */
     private $receiver;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="users")
-     * @Groups({"skill_browse"})
      * 
-     *
+     * @Groups({"user_browse"})
+     * @Groups({"user_read"})
+     * @Groups({"advertisements_browse"})
      */
     private $skill;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * 
      */
     private $username;
 
@@ -183,7 +198,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $updated;
 
+  
 
+ 
     public function __construct()
     {
         $this->advertisements = new ArrayCollection();
@@ -228,7 +245,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->imageName;
     }
 
-
+ 
 
     public function getId(): ?int
     {
@@ -575,5 +592,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    
 
 }

@@ -11,12 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Fresh\VichUploaderSerializationBundle\Annotation as Fresh;
-
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass=AdvertisementsRepository::class)
  * @Vich\Uploadable
+ * 
  * @Fresh\VichSerializableClass
  */
 class Advertisements 
@@ -26,6 +27,7 @@ class Advertisements
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"advertisements_browse"})
+     * @Groups({"user_read"})
      * 
      * 
      */
@@ -34,6 +36,7 @@ class Advertisements
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"advertisements_browse"})
+     * @Groups({"user_read"})
 
      */
     private $title;
@@ -41,6 +44,7 @@ class Advertisements
     /**
      * @ORM\Column(type="text")
      * @Groups({"advertisements_browse"})
+     * @Groups({"user_read"})
      * 
      */
     private $content;
@@ -48,7 +52,7 @@ class Advertisements
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"advertisements_browse"})
-  
+    * @Groups({"user_read"})
      */
     private $approved = false;
 
@@ -67,7 +71,7 @@ class Advertisements
     /**
      * @ORM\Column(type="string")
      * @Groups({"advertisements_browse"})
-     * 
+     * @Groups({"user_read"})
      * 
      * @Fresh\VichSerializableField("imageFile")
      * 
@@ -101,7 +105,7 @@ class Advertisements
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=true)
-     * @Groups({"category_browse"})
+     * 
      * 
      * 
      */
@@ -109,15 +113,15 @@ class Advertisements
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="advertisements")
-     * @Groups({"skill_browse"})
+     * 
      */
     private $skills;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="advertisements" )
      * @ORM\JoinColumn(nullable=false)
+     * @MaxDepth(2)
      * @Groups({"advertisements_browse"})
-     * 
      * 
      */
     private $user;
