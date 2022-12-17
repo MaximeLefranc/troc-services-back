@@ -36,7 +36,7 @@ class MessagesController extends ApiController
             ]
 
         ),  [
-      "groups" => 'message_browse', 'user_read'
+      "groups" => 'message_browse', 'user_sender_receiver'
      
      ]);
     }
@@ -90,7 +90,7 @@ class MessagesController extends ApiController
             // list of groups to use
             "groups" => 'message_browse',
          
-            'user_browse',
+            'user_read',
             'message_read'
 
         ]
@@ -117,8 +117,7 @@ class MessagesController extends ApiController
                 ]
     
             ),  [
-          "groups" => 'message_browse', 'user_read'
-         
+                "groups" => 'message_browse', 'user_sender_receiver'       
          ]);
         
     

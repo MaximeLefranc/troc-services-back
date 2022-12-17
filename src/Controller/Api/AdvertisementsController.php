@@ -50,8 +50,8 @@ class AdvertisementsController extends ApiController
         SerializerInterface $serializerInterface,
         Request $request,
         ValidatorInterface $validatorInterface,
-        EntityManagerInterface $em, 
-        ParameterBagInterface $parameterBag
+        EntityManagerInterface $em
+       
     
 
    
@@ -68,22 +68,9 @@ class AdvertisementsController extends ApiController
             $date->format('Y-m-d H:i:s');
             $ad->setCreatedAt($date);
             $ad->setUser($this->getUser());
-            if ($request->files->get('file') != null)
-    
-                 {
 
-                    $image = $request->files->get('file');
-                    $imageName = uniqid() . '_' . $image->getClientOriginalName();
-                    $image->move($parameterBag->get('public') . '/img', $imageName);
-                
-            }
-            else {$ad->setImageName('image-advert.jpeg');
-
-               
-            }
-
-          
-
+            $ad->setImageName('image-advert.jpeg');
+            
 
             $errors = $validatorInterface->validate($ad);
 
@@ -119,17 +106,19 @@ class AdvertisementsController extends ApiController
 
 
         return $this->json200($advertisementsRepository->findAllOrderByCreation(), [
-            "groups" =>
-            'advertisements_browse',
-            'category_browse',
-            'skill_browse',
-            'user_browse'
+        
+            "groups" => 
+            'category_browse', // add category to the json content
+            'skill_browse',  // add skill to the json content
+            'advertisements_browse'
+    
+          
 
         ]);
     }
 
     /**
-     * @Route("/api/advertisements/{id<\d+>}", name="read_advertisement", methods={"GET"})
+     * @Route("/api/advertisements/{id<\d+>}", name="read_advertisements", methods={"GET"})
      */
     public function readAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface, $id)
     {
@@ -145,7 +134,7 @@ class AdvertisementsController extends ApiController
             "groups" => 'advertisements_browse',
             'category_browse', // add category to the json content
             'skill_browse',  // add skill to the json content
-            'user_browse' // add user content to the json
+         
         ]);
     }
 

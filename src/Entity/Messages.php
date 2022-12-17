@@ -19,7 +19,7 @@ class Messages
      * @ORM\Column(type="integer")
      * 
      * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
      */
     private $id;
 
@@ -27,7 +27,7 @@ class Messages
      * @ORM\Column(type="text")
      *
      * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
      */
     private $content;
 
@@ -35,7 +35,7 @@ class Messages
      * @ORM\Column(type="datetime")
      * 
      * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
      */
     private $sentAt;
 
@@ -44,14 +44,14 @@ class Messages
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
      */
     private $isRead = false;
 
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"message_browse"})
-     * @Groups({"message_read"})
+     * 
      */
     private $isHidden = false;
 
