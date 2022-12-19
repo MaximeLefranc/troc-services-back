@@ -20,7 +20,7 @@ class AuthenticationSuccessListener
         }
 
         $data['data'] = array(
-            'peuso' => $user->getNickname(),
+            'pseudo' => $user->getNickname(),
             'id' => $user->getId()
         );
 
