@@ -108,7 +108,7 @@ class AdvertisementsController extends ApiController
         return $this->json200($advertisementsRepository->findAllOrderByCreation(), [
         
             "groups" => 
-            'category_browse', // add category to the json content
+           // add category to the json content
             'skill_browse',  // add skill to the json content
             'advertisements_browse'
     

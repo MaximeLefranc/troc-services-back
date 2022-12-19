@@ -31,7 +31,7 @@ class SkillController extends ApiController
             [
                 "groups" => 
                 [
-                    "skill_browse"
+                    "skill_browse", "category_read"
                 ]
             ]
         );

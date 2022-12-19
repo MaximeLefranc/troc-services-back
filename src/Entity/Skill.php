@@ -19,6 +19,7 @@ class Skill
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      * @Groups({"skill_browse"})
+     * @Groups({"skill_read"})
      *
      */
     private $id;
@@ -26,6 +27,9 @@ class Skill
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"skill_browse"})
+     * @Groups({"skill_read"})
+     * 
+     * 
      */
     private $name;
 
@@ -39,7 +43,7 @@ class Skill
     /**
      * @ORM\ManyToOne(targetEntity=Categories::class, inversedBy="skills")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"skill_browse"})
+     * 
      * 
      *
      */

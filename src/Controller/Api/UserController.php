@@ -140,7 +140,7 @@ class UserController extends ApiController
             [
                 "groups" =>
                 [
-                   'user_browse',
+                   'user_read',
                    'skill_browse',
                    'category_browse'
                    
