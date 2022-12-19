@@ -5,6 +5,7 @@ namespace App\Controller\Backoffice;
 use App\Entity\Advertisements;
 use App\Form\AdvertisementsType;
 use App\Repository\AdvertisementsRepository;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,26 +27,70 @@ class AdvertisementController extends AbstractController
     }
 
     /**
-     * @Route("/moderation", name="moderation_advertisements", methods={"GET"})
+     * @Route("/moderation", name="moderation_advertisements", methods={"GET", "PUT"})
      */
     public function moderation(AdvertisementsRepository $advertisementsRepository): Response
-    {   
-        
+    {
+
         return $this->render('backoffice/advertisement/moderation.html.twig', [
-            'advertisements' => $advertisementsRepository->findAll(),
+            'advertisements' => $advertisementsRepository->findAdvertToModerate(),
         ]);
     }
 
-     /**
+    /**
      * @Route("/moderation/{id}", name="read_advertisement_moderation", methods={"GET"})
      */
-    public function showModeration(Advertisements $advertisement): Response
+    public function showModeration(Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
     {
+
+
         return $this->render('backoffice/advertisement/show_moderation.html.twig', [
             'advertisement' => $advertisement,
         ]);
     }
-  
+
+
+    /**
+     * @Route("/moderation/{id}/approve", name="approve_advertisement", methods={"GET","PUT"})
+     */
+    public function approveAdvertisement(Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
+    {
+        //put the set approve to true
+        $approveAdvert =  $advertisement->setApproved(true)
+            ->setUpdatedAt(new DateTime);
+        // persist + flush
+        $advertisementsRepository->add($approveAdvert, true);
+        $this->addFlash("advertisement-approve", "L'annonce à bien été mise en ligne");
+        // redirect route
+        return $this->redirectToRoute('moderation_advertisements');
+
+
+        return $this->render('backoffice/advertisement/show_moderation.html.twig', [
+            'advertisement' => $advertisement,
+        ]);
+    }
+
+
+    /**
+     * @Route("/moderation/{id}/refuse", name="refuse_advertisement", methods={"GET","PUT"})
+     */
+    public function refuseAdvertisement(Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
+    {
+        //put the set approve to true
+        $refuseAdvert =  $advertisement->setApproved(false)
+            ->setIsHidden(true)
+            ->setUpdatedAt(new DateTime);
+        // persist + flush
+        $advertisementsRepository->add($refuseAdvert, true);
+
+        $this->addFlash("advertisement-refuse", "L'annonce à bien été refusée");
+        // redirect route
+        return $this->redirectToRoute('moderation_advertisements');
+
+        return $this->render('backoffice/advertisement/show_moderation.html.twig', [
+            'advertisement' => $advertisement,
+        ]);
+    }
 
 
     /**
@@ -104,7 +149,7 @@ class AdvertisementController extends AbstractController
      */
     public function delete(Request $request, Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$advertisement->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $advertisement->getId(), $request->request->get('_token'))) {
             $advertisementsRepository->remove($advertisement, true);
         }
 

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Back-O'flix{% endblock %}
+{% block title %}Back Troc'services{% endblock %}
 
 {% block body %}
     <h1>Back Troc'services</h1>
@@ -20,6 +20,38 @@
             <div class="card-body">
                 <a href="{{ path('backoffice_users_new') }}" class="btn btn-success card-link">Créer</a>
                 <a href="{{ path('backoffice_users') }}" class="btn btn-info card-link">voir</a>
+            </div>
+
+    </div>
+
+        </div>
+
+        <div class="d-flex">
+        <div class="card" style="width: 18rem;margin:.75em">
+            <div class="card-header">Catégories</div>
+            <div class="card-body">
+                <a href="{{ path('backoffice_categories_new') }}" class="btn btn-success card-link">Créer</a>
+                <a href="{{ path('backoffice_categories') }}" class="btn btn-info card-link">voir</a>
+            </div>
+
+    </div>
+
+          <div class="d-flex">
+        <div class="card" style="width: 18rem;margin:.75em">
+            <div class="card-header">Skills</div>
+            <div class="card-body">
+                <a href="{{ path('add_skill') }}" class="btn btn-success card-link">Créer</a>
+                <a href="{{ path('backoffice_skills') }}" class="btn btn-info card-link">voir</a>
+            </div>
+
+    </div>
+          <div class="d-flex">
+        <div class="card" style="width: 18rem;margin:.75em">
+            <div class="card-header">Annonces</div>
+            <div class="card-body">
+                <a href="{{ path('add_advertisement') }}" class="btn btn-success card-link">Créer</a>
+                <a href="{{ path('backoffice_advertisements') }}" class="btn btn-info card-link">voir</a>
+                <a href="{{ path('moderation_advertisements') }}" class="btn btn-success card-link">Modération</a>
             </div>
 
     </div>
