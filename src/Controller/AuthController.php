@@ -25,16 +25,14 @@ class AuthController extends ApiController
     /**
      * @Route("/api/login_check", name="api_login", methods={"POST"})
      * @param UserInterface $user
-     * @param User $users
      * @param JWTTokenManagerInterface $JWTManager
      * @return JsonResponse
      */
     public function getTokenUser(UserInterface $user, JWTTokenManagerInterface $JWTManager): JsonResponse
     {   
-        
+        dd($user);
         
         return new JsonResponse(['token' => $JWTManager->create($user)]);
         
     }
-
 }
