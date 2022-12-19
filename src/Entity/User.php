@@ -132,7 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string")
-     * 
+     * @Groups({"advertisements_browse"})
      * @Groups({"user_browse"})
      *@Groups({"user_read"})
      

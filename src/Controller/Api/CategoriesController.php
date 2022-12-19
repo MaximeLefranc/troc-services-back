@@ -17,7 +17,7 @@ class CategoriesController extends ApiController
        
 
         return $this->json200($categoriesRepository->findAll(), [
-      "groups" => 'category_browse', 'skill_browse'
+      "groups" => 'category_browse', 'skill_read'
      
     ]);
     }

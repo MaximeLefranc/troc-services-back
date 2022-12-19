@@ -113,7 +113,7 @@ class Advertisements
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="advertisements")
-     * 
+     * @Groups({"skill_browse"})
      */
     private $skills;
 
