@@ -95,14 +95,23 @@ class UserController extends ApiController
     }
 
         $email= $newUser->getEmail();
+        $nickname = $newUser->getNickname();
         $checkEmail= $userRepository->findByEmail($email);
 
-        if($email=== $checkEmail){
+        if($checkEmail){
 
             return $this->json('Cette adresse email est déja associée à un compte', 400);
 
         }
-        // aouter ici le message d'erreur pour l'adresse mail qui existe deja, on check ça avec la fonction findByEmail
+        
+        $checkNickname = $userRepository->findByNickname($nickname);
+
+        if($checkNickname){
+
+            return $this->json('Ce pseudo est déja utilisé par un utilisateur', 400);
+
+        }
+        
 
     $entityManagerInterface->persist($newUser);
     $entityManagerInterface->flush();
