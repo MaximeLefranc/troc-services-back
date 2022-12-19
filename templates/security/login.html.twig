@@ -3,19 +3,16 @@
 {% block title %}backoffice Troc'services{% endblock %}
 
 {% block body %}
+<div class="login">
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-        </div>
-    {% endif %}
+    
  
-    <img class="image-logo" src='../images/backoffice-image/troc-services-sansBG.svg'>
-    <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+         <img src="{{ asset(image_dir ~ "troc-services.svg" ) }}" rel="stylesheet" class="img-logo"> </img>
+    <h2 class="h3 mb-3 font-weight-normal" style="text-align: center">Backoffice troc'services</h2>
     <label for="inputEmail">Email</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
     <label for="inputPassword">mot de passe</label>
@@ -40,4 +37,5 @@
         Se connecter
     </button>
 </form>
+</div>
 {% endblock %}

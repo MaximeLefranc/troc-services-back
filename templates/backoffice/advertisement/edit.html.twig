@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Advertisements{% endblock %}
+{% block title %}Edition de l'annonce {{ advertisement.title }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Advertisements</h1>
+    <h1>Edition de l'annonce {{ advertisement.title }}</h1>
 
     {{ include('backoffice/advertisement/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('backoffice_advertisements') }}">back to list</a>
+    <a href="{{ path('backoffice_advertisements') }}">retour à la liste</a>
 
     {{ include('backoffice/advertisement/_delete_form.html.twig') }}
 {% endblock %}

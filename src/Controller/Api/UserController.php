@@ -28,7 +28,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class UserController extends ApiController
 {   
      /**
-   * @Route("/upload/{id}", name="image_upload", methods={"POST"})
+   * @Route("/upload/{id}", name="image_upload", methods={"POST", "PUT"})
    */
   public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
   {
@@ -204,7 +204,7 @@ class UserController extends ApiController
     }
 
     /**
-     * @Route("/{id}/edit", name="api_edit_user", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="api_edit_user", methods={"GET", "POST", "PUT"})
      */
     public function edit(User $user, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
@@ -212,7 +212,6 @@ class UserController extends ApiController
 
         $content = $request->getContent();
 
-        
         $serializerInterface->deserialize(
             $content,
             User::class,
@@ -234,7 +233,7 @@ class UserController extends ApiController
             // c'est ici que je fournis les groupes de serialisation
             [
                 // list of groups to use
-                "groups" => ['user_browse']
+                "groups" => ['user_read']
     
             ]
             

@@ -3,7 +3,7 @@
 {% block title %}Advertisements{% endblock %}
 
 {% block body %}
-    <h1>Advertisements</h1>
+    <h1>détail de l'annonce {{ advertisement.title }}</h1>
 
     <table class="table">
         <tbody>
@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <th>Image</th>
-                <td> <img src="{{ advertisement.imageName }}" alt="Example" style="width:20%; height:10%"/></td>
+                 <td> <img src="{{ asset(upload_dir ~ advertisement.imageName ) }}" rel="stylesheet" class="img-logo"> </img></td>
             </tr>
             <tr>
                 <th>Date de création</th>

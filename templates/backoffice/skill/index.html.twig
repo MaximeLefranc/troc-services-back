@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Skill index{% endblock %}
+{% block title %}Liste des skill{% endblock %}
 
 {% block body %}
-    <h1>Skill index</h1>
+    <h1>Liste des skill</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -19,8 +19,9 @@
                 <td>{{ skill.id }}</td>
                 <td>{{ skill.name }}</td>
                 <td>
-                    <a href="{{ path('read_skill', {'id': skill.id}) }}">show</a>
-                    <a href="{{ path('edit_skill', {'id': skill.id}) }}">edit</a>
+                    <a href="{{ path('read_skill', {'id': skill.id}) }}" class="btn btn-success">Voir</a>
+                    <a href="{{ path('edit_skill', {'id': skill.id}) }}" class="btn btn-warning">Editer</a>
+                          <a href="{{ path('delete_skill', {'id': skill.id}) }}" class="btn btn-danger">Supprimer</a>
                 </td>
             </tr>
         {% else %}

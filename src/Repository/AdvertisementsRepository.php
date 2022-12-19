@@ -45,6 +45,7 @@ class AdvertisementsRepository extends ServiceEntityRepository
         //1. donner l'alias de l'objet
         return $this->createQueryBuilder('a')
             // trier par duration
+            ->andWhere("a.approved = true ")
             ->orderBy("a.createdAt", "DESC")
             // limiter le nombre de résultats
             ->setMaxResults(10)
@@ -59,11 +60,11 @@ class AdvertisementsRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('a')
             ->andWhere('a.approved = false')
             ->andWhere('a.isHidden = false')
-        
-
             ->getQuery()
             ->getResult();
     }
+
+
 //    /**
 //     * @return Advertisements[] Returns an array of Advertisements objects
 //     */
