@@ -27,36 +27,8 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-        /**
-     * @Route("/api/login", name="app_login")
-     */
-    public function loginApi(AuthenticationUtils $authenticationUtils, UserRepository $userRepository): Response
-    {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
-    
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-          
-        return $this->json($this->getUser(), 
-        Response::HTTP_ACCEPTED, 
-        ['last_username' => $lastUsername, 'error' => $error],
-         [
-                "groups" =>
-                [
-                    "user_browse",
-                    'skill_browse', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur,
-                    'message_browse',
-                    'advertisements_browse'
+   
 
-                ]
-            ]
-    
-    );
-    }
 
     /**
      * @Route("/logout", name="app_logout")

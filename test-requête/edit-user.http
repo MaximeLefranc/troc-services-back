@@ -1,0 +1,19 @@
+POST  http://localhost:8080/api/user/2/edit
+Content-Type: application/json
+
+{
+    "first_name": "admin",
+    "last_name": "admin",
+    "biography": " test",
+    "address": "adresse test 2",
+    "city": "Lyon",
+    "zip_code": "69000",
+    "birth_date": "1959-02-28",
+    "nickname": "sam",
+    "email": "lamrinouha9@gmail.com",
+    "password": "123456",
+    "roles": ["ROLE_ADMIN"],
+    "image_name": "test"
+
+    
+  }

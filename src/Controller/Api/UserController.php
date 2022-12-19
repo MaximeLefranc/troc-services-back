@@ -58,7 +58,7 @@ class UserController extends ApiController
      * @param UserPasswordHasherInterface $passwordHasher
      */
 
-    public function createUser(ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
+    public function new(UserRepository $userRepository, ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
   {
     
     $jsonContent = $request->getContent();
@@ -94,15 +94,16 @@ class UserController extends ApiController
         );
     }
 
-        /*$email= $user->getEmail();
+        $email= $newUser->getEmail();
         $checkEmail= $userRepository->findByEmail($email);
 
-        if($email== $checkEmail){
+        if($email=== $checkEmail){
 
             return $this->json('Cette adresse email est déja associée à un compte', 400);
 
-        }*/
+        }
         // aouter ici le message d'erreur pour l'adresse mail qui existe deja, on check ça avec la fonction findByEmail
+
     $entityManagerInterface->persist($newUser);
     $entityManagerInterface->flush();
 
