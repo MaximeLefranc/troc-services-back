@@ -3,7 +3,7 @@
 {% block title %}Advertisements{% endblock %}
 
 {% block body %}
-    <h1>Advertisements</h1>
+    <h1>Détail de l'annonce {{advertisement.title}} </h1>
 
     <table class="table">
         <tbody>
@@ -12,31 +12,31 @@
                 <td>{{ advertisement.id }}</td>
             </tr>
             <tr>
-                <th>Title</th>
+                <th>titre</th>
                 <td>{{ advertisement.title }}</td>
             </tr>
             <tr>
-                <th>Content</th>
+                <th>description</th>
                 <td>{{ advertisement.content }}</td>
             </tr>
             <tr>
-                <th>Approved</th>
+                <th>approuvé ?</th>
                 <td>{{ advertisement.approved ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>ImageName</th>
-                <td>{{ advertisement.imageName }}</td>
+                <th>Image</th>
+               <td> <img src="{{ asset(upload_dir ~ advertisement.imageName ) }}" rel="stylesheet" class="img-logo"> </img></td>
             </tr>
             <tr>
-                <th>IsHidden</th>
+                <th>est supprimé ?</th>
                 <td>{{ advertisement.isHidden ? 'Yes' : 'No' }}</td>
             </tr>
             <tr>
-                <th>CreatedAt</th>
+                <th>Créé le</th>
                 <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>UpdatedAt</th>
+                <th>Modifié le</th>
                 <td>{{ advertisement.updatedAt ? advertisement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>

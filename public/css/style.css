@@ -5,7 +5,7 @@
 }
 
 body {
-    height: 100vh;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,11 +16,21 @@ body {
 .btn{
     background-color: #fffbfe;
     font-size: 20px;
+    color: black;
     margin-top: 15px;
     
 }
 
+.img-logo{
+    width: 50%;
+    align-items: center;
+    margin-left: 10em
+}
 
+.bg-light{
+    color: #6667ab;
+    background-color: #838e83;
+}
 
 
 

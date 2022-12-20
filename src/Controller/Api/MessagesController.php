@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class MessagesController extends ApiController
 {
@@ -45,6 +46,7 @@ class MessagesController extends ApiController
 
     /** send a message
      * @Route("/api/user/{id<\d+>}/messages/send", name="send_message", methods={"POST"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function sendMessage(Request $request, SerializerInterface $serializerInterface, ValidatorInterface $validatorInterface,
     EntityManagerInterface $em, UserRepository $userRepository, $id)
@@ -58,7 +60,8 @@ class MessagesController extends ApiController
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $message->setSentAt($date);
-            $message->setSender($this->getUser($id)); //add the sender of the message to the db
+          
+            $message->setSender($this->getUser()); //add the sender of the message to the db
             $message->setIsRead(false);
             $message->setIsHidden(false);
 
@@ -98,6 +101,7 @@ class MessagesController extends ApiController
 }
     /** show messages sent
      * @Route("/api/user/{id<\d+>}/messages/sent", name="sent_messages", methods={"GET"})
+     * @Security("is_granted('ROLE_USER')")
      */
   
         public function findMessagesSent($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
@@ -128,6 +132,7 @@ class MessagesController extends ApiController
     * @param SerializerInterface $serializerInterface
     * @param EntityManagerInterface $entityManagerInterface
     * @Route("/api/messages/{id<\d+>}/delete", name="delete_message", methods={"PUT"})
+    * @Security("is_granted('ROLE_USER')")
     */
     public function deleteAdvertisement(Messages $messages, Request $request, SerializerInterface $serializerInterface, 
     EntityManagerInterface $entityManagerInterface)

@@ -3,19 +3,19 @@
 {% block title %}Advertisements index{% endblock %}
 
 {% block body %}
-    <h1>Advertisements index</h1>
+    <h1>Liste des annonces</h1>
 
     <table class="table">
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Approved</th>
-                <th>ImageName</th>
-                <th>IsHidden</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
+                <th>titre</th>
+                <th>description</th>
+                <th>approuvé?</th>
+                <th>Image</th>
+                <th>est supprimé?</th>
+                <th>Créé le</th>
+                <th>Mis à jour le</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -26,13 +26,13 @@
                 <td>{{ advertisement.title }}</td>
                 <td>{{ advertisement.content }}</td>
                 <td>{{ advertisement.approved ? 'Yes' : 'No' }}</td>
-                <td>{{ advertisement.imageName }}</td>
+                <td> <img src="{{ asset(upload_dir ~ advertisement.imageName ) }}" rel="stylesheet" class="img-logo"> </img></td>
                 <td>{{ advertisement.isHidden ? 'Yes' : 'No' }}</td>
                 <td>{{ advertisement.createdAt ? advertisement.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ advertisement.updatedAt ? advertisement.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('read_advertisement', {'id': advertisement.id}) }}">show</a>
-                    <a href="{{ path('edit_advertisement', {'id': advertisement.id}) }}">edit</a>
+                    <a href="{{ path('read_advertisement', {'id': advertisement.id}) }}" class="btn btn-success">voir</a>
+                    <a href="{{ path('edit_advertisement', {'id': advertisement.id}) }}" class="btn btn-success">éditer</a>
                 </td>
             </tr>
         {% else %}
@@ -43,5 +43,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('add_advertisement') }}">Create new</a>
+    <a href="{{ path('add_advertisement') }}">Créer une nouvelle annonce</a>
 {% endblock %}

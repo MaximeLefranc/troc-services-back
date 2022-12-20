@@ -40,11 +40,13 @@ class AdvertisementsRepository extends ServiceEntityRepository
     }
 
         
-    public function findAllOrderByCreation(): array
+    public function findAllAdvertModerated(): array
     {
         //1. donner l'alias de l'objet
         return $this->createQueryBuilder('a')
             // trier par duration
+            ->andWhere("a.approved = true ")
+            ->andWhere('a.isHidden = false')
             ->orderBy("a.createdAt", "DESC")
             // limiter le nombre de résultats
             ->setMaxResults(10)
@@ -53,17 +55,36 @@ class AdvertisementsRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAdvertApprove(): array
+    {
+        // automatically knows to select Products
+        // the "p" is an alias you'll use in the rest of the query
+        $qb = $this->createQueryBuilder('a')
+            ->where('a.approved = true')
+            ->where('a.isHidden = false');
+     
+       
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+
+        // to get just one result:
+        // $product = $query->setMaxResults(1)->getOneOrNullResult();
+    }
+
+
     public function findAdvertToModerate()
     {
   
        return $this->createQueryBuilder('a')
             ->andWhere('a.approved = false')
             ->andWhere('a.isHidden = false')
-        
-
             ->getQuery()
             ->getResult();
     }
+
+
 //    /**
 //     * @return Advertisements[] Returns an array of Advertisements objects
 //     */

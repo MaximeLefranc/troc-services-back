@@ -9,9 +9,9 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Name</th>
-                <th>CreatedAt</th>
-                <th>UpdatedAt</th>
+                <th>Nom</th>
+                <th>Créé le</th>
+                <th>Mis à jour le</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -23,9 +23,9 @@
                 <td>{{ category.createdAt ? category.createdAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ category.updatedAt ? category.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a class="btn btn-primary" href="{{ path('backoffice_categories_show', {'id': category.id}) }}">détail</a>
-                    <a class="btn btn-warning" href="{{ path('backoffice_categories_edit', {'id': category.id}) }}">modifier</a>
-                    <a class="btn btn-danger" href="{{ path('backoffice_categories_delete', {'id': category.id}) }}">supprimer</a>
+                    <a class="btn btn-primary" href="{{ path('backoffice_categories_show', {'id': category.id}) }}" class="btn btn-success">détail</a>
+                    <a class="btn btn-warning" href="{{ path('backoffice_categories_edit', {'id': category.id}) }}" class="btn btn-warning">modifier</a>
+                    <a class="btn btn-danger" href="{{ path('backoffice_categories_delete', {'id': category.id}) }}" class="btn btn-danger">supprimer</a>
                     
                 </td>
             </tr>
