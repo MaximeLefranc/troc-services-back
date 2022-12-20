@@ -58,7 +58,7 @@ class Messages
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
      * @Groups({"message_browse"})
-     * 
+     *
      * 
      */
     private $sender;
@@ -74,6 +74,7 @@ class Messages
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"message_browse"})
      */
     private $object;
 

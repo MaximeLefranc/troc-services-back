@@ -5,6 +5,7 @@ namespace App\Controller\Api;
 use App\Entity\Image;
 use App\Entity\User;
 use App\Form\UserType;
+use App\Repository\AdvertisementsRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +19,13 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use DateTime;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 /**
  * @Route("/api/user")
@@ -165,6 +172,7 @@ class UserController extends ApiController
      */
     public function read(User $user = null): JsonResponse // POUR CETTE ROUTE, ON DOIT ENVOYER UN ID?? oui
     {
+
         if ($user === null) {
 
             return $this->json(
@@ -193,7 +201,7 @@ class UserController extends ApiController
                      'user_read', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
                      'skill_browse', 
                  
-                     'message_browse'
+                    
                    
                     
                  
@@ -205,6 +213,7 @@ class UserController extends ApiController
 
     /**
      * @Route("/{id}/edit", name="api_edit_user", methods={"GET", "POST", "PUT"})
+     * @Security("is_granted('ROLE_USER')")
      */
     public function edit(User $user, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
@@ -234,21 +243,31 @@ class UserController extends ApiController
             [
                 // list of groups to use
                 "groups" => ['user_read']
-    
             ]
             
         );
     }
 
-    /**
-     * @Route("/{id}", name="delete_user", methods={"POST"})
-     */
-    public function delete(Request $request, User $user, UserRepository $userRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
-            $userRepository->remove($user, true);
-        }
 
-        return $this->redirectToRoute('api_user_index', [], Response::HTTP_SEE_OTHER);
+    /**
+     * @Route("/{id}/delete", name="delete_user", methods={"DELETE"})
+     *  @Security("is_granted('ROLE_USER')")
+     */
+    public function delete(Request $request, User $user, UserRepository $userRepository, TokenStorageInterface $tokenStorage): Response
+    {
+
+        
+    $userRepository->remove($user, true);
+
+
+        return $this->json($user, Response::HTTP_ACCEPTED, [],[
+            // list of groups to use
+            "groups" => ['user_read',    
+            'skill_browse', 
+             
+            'message_browse'
+]
+
+        ] );
     }
 }

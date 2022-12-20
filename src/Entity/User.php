@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\MaxDepth;
 
 
+
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @Vich\Uploadable
@@ -97,12 +98,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"user_read"})
+     * @Groups({"advertisements_browse"})
      */
     private $city;
 
     /**
      * @ORM\Column(type="string", length=10)
      * @Groups({"user_read"})
+     * @Groups({"advertisements_browse"})
      */
     private $zip_code;
 
@@ -138,6 +141,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      
      * 
      * @Fresh\VichSerializableField("picture")
+     * @Groups({"user_sender_receiver"})
      * 
      * @var string|null
      */
@@ -146,7 +150,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     /**
-     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user")
+     * @ORM\OneToMany(targetEntity=Advertisements::class, mappedBy="user", cascade={"remove"})
      * 
      * @Groups({"user_read"})
      * 
