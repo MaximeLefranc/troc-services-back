@@ -87,6 +87,7 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
             'Symfony\\Component\\Messenger\\Bridge\\Doctrine\\' => 44,
             'Symfony\\Component\\Messenger\\Bridge\\Amqp\\' => 40,
             'Symfony\\Component\\Messenger\\' => 28,
+            'Symfony\\Component\\Mailer\\Bridge\\Google\\' => 39,
             'Symfony\\Component\\Mailer\\' => 25,
             'Symfony\\Component\\Intl\\' => 23,
             'Symfony\\Component\\HttpKernel\\' => 29,
@@ -118,6 +119,7 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
             'Symfony\\Bridge\\PhpUnit\\' => 23,
             'Symfony\\Bridge\\Monolog\\' => 23,
             'Symfony\\Bridge\\Doctrine\\' => 24,
+            'SymfonyBundles\\JsonRequestBundle\\' => 33,
             'Sensio\\Bundle\\FrameworkExtraBundle\\' => 35,
         ),
         'P' => 
@@ -374,6 +376,10 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         array (
             0 => __DIR__ . '/..' . '/symfony/messenger',
         ),
+        'Symfony\\Component\\Mailer\\Bridge\\Google\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/google-mailer',
+        ),
         'Symfony\\Component\\Mailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/mailer',
@@ -497,6 +503,10 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'Symfony\\Bridge\\Doctrine\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/doctrine-bridge',
+        ),
+        'SymfonyBundles\\JsonRequestBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony-bundles/json-request-bundle/src',
         ),
         'Sensio\\Bundle\\FrameworkExtraBundle\\' => 
         array (
@@ -662,6 +672,7 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'App\\Controller\\Api\\AdvertisementsController' => __DIR__ . '/../..' . '/src/Controller/Api/AdvertisementsController.php',
         'App\\Controller\\Api\\ApiController' => __DIR__ . '/../..' . '/src/Controller/Api/ApiController.php',
         'App\\Controller\\Api\\CategoriesController' => __DIR__ . '/../..' . '/src/Controller/Api/CategoriesController.php',
+        'App\\Controller\\Api\\ContactController' => __DIR__ . '/../..' . '/src/Controller/Api/ContactController.php',
         'App\\Controller\\Api\\MessagesController' => __DIR__ . '/../..' . '/src/Controller/Api/MessagesController.php',
         'App\\Controller\\Api\\SecurityController' => __DIR__ . '/../..' . '/src/Controller/Api/SecurityController.php',
         'App\\Controller\\Api\\SkillController' => __DIR__ . '/../..' . '/src/Controller/Api/SkillController.php',
@@ -678,8 +689,10 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'App\\Entity\\Messages' => __DIR__ . '/../..' . '/src/Entity/Messages.php',
         'App\\Entity\\Skill' => __DIR__ . '/../..' . '/src/Entity/Skill.php',
         'App\\Entity\\User' => __DIR__ . '/../..' . '/src/Entity/User.php',
+        'App\\EventListener\\AuthenticationSuccessListener' => __DIR__ . '/../..' . '/src/EventListener/AuthenticationSuccessListener.php',
         'App\\Form\\AdvertisementsType' => __DIR__ . '/../..' . '/src/Form/AdvertisementsType.php',
         'App\\Form\\CategoriesType' => __DIR__ . '/../..' . '/src/Form/CategoriesType.php',
+        'App\\Form\\Skill1Type' => __DIR__ . '/../..' . '/src/Form/Skill1Type.php',
         'App\\Form\\SkillType' => __DIR__ . '/../..' . '/src/Form/SkillType.php',
         'App\\Form\\User1Type' => __DIR__ . '/../..' . '/src/Form/User1Type.php',
         'App\\Form\\User1TypeEdit' => __DIR__ . '/../..' . '/src/Form/User1TypeEdit.php',
@@ -3707,6 +3720,10 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle' => __DIR__ . '/..' . '/sensio/framework-extra-bundle/src/SensioFrameworkExtraBundle.php',
         'Sensio\\Bundle\\FrameworkExtraBundle\\Templating\\TemplateGuesser' => __DIR__ . '/..' . '/sensio/framework-extra-bundle/src/Templating/TemplateGuesser.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'SymfonyBundles\\JsonRequestBundle\\DependencyInjection\\Configuration' => __DIR__ . '/..' . '/symfony-bundles/json-request-bundle/src/DependencyInjection/Configuration.php',
+        'SymfonyBundles\\JsonRequestBundle\\DependencyInjection\\JsonRequestExtension' => __DIR__ . '/..' . '/symfony-bundles/json-request-bundle/src/DependencyInjection/JsonRequestExtension.php',
+        'SymfonyBundles\\JsonRequestBundle\\EventListener\\RequestTransformerListener' => __DIR__ . '/..' . '/symfony-bundles/json-request-bundle/src/EventListener/RequestTransformerListener.php',
+        'SymfonyBundles\\JsonRequestBundle\\JsonRequestBundle' => __DIR__ . '/..' . '/symfony-bundles/json-request-bundle/src/JsonRequestBundle.php',
         'Symfony\\Bridge\\Doctrine\\CacheWarmer\\ProxyCacheWarmer' => __DIR__ . '/..' . '/symfony/doctrine-bridge/CacheWarmer/ProxyCacheWarmer.php',
         'Symfony\\Bridge\\Doctrine\\ContainerAwareEventManager' => __DIR__ . '/..' . '/symfony/doctrine-bridge/ContainerAwareEventManager.php',
         'Symfony\\Bridge\\Doctrine\\DataCollector\\DoctrineDataCollector' => __DIR__ . '/..' . '/symfony/doctrine-bridge/DataCollector/DoctrineDataCollector.php',
@@ -5322,6 +5339,8 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'Symfony\\Component\\Intl\\Util\\IcuVersion' => __DIR__ . '/..' . '/symfony/intl/Util/IcuVersion.php',
         'Symfony\\Component\\Intl\\Util\\IntlTestHelper' => __DIR__ . '/..' . '/symfony/intl/Util/IntlTestHelper.php',
         'Symfony\\Component\\Intl\\Util\\Version' => __DIR__ . '/..' . '/symfony/intl/Util/Version.php',
+        'Symfony\\Component\\Mailer\\Bridge\\Google\\Transport\\GmailSmtpTransport' => __DIR__ . '/..' . '/symfony/google-mailer/Transport/GmailSmtpTransport.php',
+        'Symfony\\Component\\Mailer\\Bridge\\Google\\Transport\\GmailTransportFactory' => __DIR__ . '/..' . '/symfony/google-mailer/Transport/GmailTransportFactory.php',
         'Symfony\\Component\\Mailer\\DataCollector\\MessageDataCollector' => __DIR__ . '/..' . '/symfony/mailer/DataCollector/MessageDataCollector.php',
         'Symfony\\Component\\Mailer\\DelayedEnvelope' => __DIR__ . '/..' . '/symfony/mailer/DelayedEnvelope.php',
         'Symfony\\Component\\Mailer\\Envelope' => __DIR__ . '/..' . '/symfony/mailer/Envelope.php',

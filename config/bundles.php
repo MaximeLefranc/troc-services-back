@@ -17,4 +17,5 @@ return [
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     Fresh\VichUploaderSerializationBundle\FreshVichUploaderSerializationBundle::class => ['all' => true],
     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
+    SymfonyBundles\JsonRequestBundle\JsonRequestBundle::class => ['all' => true],
 ];
