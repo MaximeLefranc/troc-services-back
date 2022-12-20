@@ -48,10 +48,16 @@ security:
         - { path: ^/backoffice, roles: ROLE_ADMIN }
         # toutes les pages sauf celles précisées plus bas
         - { path: ^/api/, roles: PUBLIC_ACCESS}
-        # toutes les reoutes en edit (edit une annonce et edit un user)
+        # toutes les routes en edit (edit une annonce et edit un user)
         - { path: ^/api/\w+/\d+/edit, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST]}
-        # toutes les routes d'ajout/création (création d'un profil)
-        - { path: ^/api/\w+/new, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST]}
+        # toutes les reoutes en edit (edit une annonce et edit un user)
+        - { path: ^/api/user/\d+/messages, roles: IS_AUTHENTICATED_FULLY  , methods: [GET]}
+        # création d'un profil 
+        - { path: ^/api/user/new, roles: PUBLIC_ACCESS  , methods: [GET, POST]}
+        # contact
+        - { path: ^/api/contact, roles: PUBLIC_ACCESS  , methods: [GET, POST]}
+        # création d'une annonce
+        - { path: ^/api/advertisements/new, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST]}
 
 
 
