@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller\Api;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -20,7 +19,7 @@ class ContactController extends AbstractController
     /** 
      * @Route("/api/contact", name="contact", methods={"GET", "POST"})
      */
-    public function contact(Request $request, MailerInterface $mailer, SerializerInterface $serializerInterface)
+    public function contact(Request $request, MailerInterface $mailer)
     {
         // on récupère les infos reçue en json
         $jsonContent = $request->getContent();

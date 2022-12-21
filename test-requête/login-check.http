@@ -2,8 +2,8 @@ POST http://localhost:8080/api/login_check
 Content-Type: application/json
 
 {
-    "username": "test3@gmail.com",
-    "password": "123chaton"
+    "username": "lamrinouha9@gmail.com",
+    "password": "123456"
 
     
   }

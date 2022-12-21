@@ -6,5 +6,5 @@ vich_uploader:
     mappings:
         image:
             uri_prefix: /images/image
-            upload_destination: '%kernel.project_dir%/public/images/picture'
+            upload_destination: '%kernel.project_dir%/public/img'
             namer: Vich\UploaderBundle\Naming\SmartUniqueNamer

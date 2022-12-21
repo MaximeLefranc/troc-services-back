@@ -5,8 +5,10 @@ namespace App\Form;
 use App\Entity\Skill;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Bridge\Doctrine\Form\Type\DateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType as TypeDateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -57,7 +59,10 @@ class User1Type extends AbstractType
             ->add('address')
             ->add('city')
             ->add('zip_code')
-            ->add('birth_date')
+            ->add('birth_date', TypeDateType::class, [
+
+                'widget' => 'single_text'
+                ])
             ->add('nickname')
             ->add('imageFile', VichImageType::class)
             ->add('Skill', EntityType::class,

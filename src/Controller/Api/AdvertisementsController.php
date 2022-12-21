@@ -43,7 +43,7 @@ class AdvertisementsController extends ApiController
     }
 
     /**
-     * @Route("/api/advertisements/add", name="add_advertisements", methods={"POST"})
+     * @Route("/api/advertisements/new", name="add_advertisements", methods={"POST"})
      */
     public function addAdvertisement(
 

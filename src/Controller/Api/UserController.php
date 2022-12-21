@@ -57,7 +57,7 @@ class UserController extends ApiController
   }
 
     /**
-     * @Route("/register", name="api_create_user", methods={"POST"})
+     * @Route("/new", name="api_create_user", methods={"POST"})
      * @param Request $request
      * @param SerializerInterface $serializerInterface
      * @param ValidatorInterface $validatorInterface
@@ -86,7 +86,7 @@ class UserController extends ApiController
         ->setCreated(new DateTime());
 
         if ($newUser->setImageFile() === null) {
-            $newUser->setImageName('photo-profil.webp');
+            $newUser->setImageName('photo-avatar.jpeg');
         }
 
         $errors = $validatorInterface->validate($newUser);
@@ -185,7 +185,6 @@ class UserController extends ApiController
                 // on a pas besoin des autres paramètres
             );
         }
-
         return $this->json(
             // les données
             $user,
@@ -193,18 +192,14 @@ class UserController extends ApiController
             Response::HTTP_OK,
             // les entètes HTTP, on n'a pas de besoin de les modifier, [] par défaut
             [],
-            // c'est ici que je fournis les groupes de serialisation
+            // c'est ici que je fournis les groupes de serialisations
             [
                 "groups" =>
                 [
                      // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
                      'user_read', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
                      'skill_browse', 
-                 
-                    
-                   
-                    
-                 
+
 
                 ]
             ]
