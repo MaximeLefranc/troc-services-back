@@ -56,7 +56,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * 
      * @Groups({"user_read"})
      */
-    private $roles = [];
+    private $roles ;
 
     /**
      * @var string The hashed password

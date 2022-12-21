@@ -43,23 +43,24 @@ security:
     access_control:
     
         
-
         # pour le compte backoffice, accés restreint aux administrateurs
         - { path: ^/backoffice, roles: ROLE_ADMIN }
         # toutes les pages sauf celles précisées plus bas
         - { path: ^/api/, roles: PUBLIC_ACCESS}
         # toutes les routes en edit (edit une annonce et edit un user)
         - { path: ^/api/\w+/\d+/edit, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST]}
-        # toutes les routes en new (ajouter une annonce et ajouter un user)
+        # toutes les routes en new (ex:ajouter une annonce)
         - { path: ^/api/\w+/new, roles: IS_AUTHENTICATED_FULLY , methods: [GET, POST]}
          # routes delete : methods: PUT et DELETE
         - { path: ^/api/\w+/\d+, roles: IS_AUTHENTICATED_FULLY , methods: [PUT, DELETE]}
         # toutes routes concernant les messages
         - { path: ^/api/user/\d+/messages, roles: IS_AUTHENTICATED_FULLY }
+        # toutes routes concernant les messages
+        - { path: ^/api/messages/, roles: IS_AUTHENTICATED_FULLY }
         # contact
         - { path: ^/api/contact, roles: PUBLIC_ACCESS  , methods: [GET, POST]}
-
-
+        # route pour s'inscrire
+        - { path: ^/api/user/new, roles: PUBLIC_ACCESS , methods: [GET, POST]}
 
 
 
