@@ -78,6 +78,11 @@ class Messages
      */
     private $object;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $updatedAt;
+
     
 
     public function __construct()
@@ -171,6 +176,18 @@ class Messages
     public function setObject(string $object): self
     {
         $this->object = $object;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

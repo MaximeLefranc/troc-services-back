@@ -45,7 +45,6 @@ class UsersController extends AbstractController
             $passwordHashed = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($passwordHashed);
             $user->setCreated(new \DateTime());
-            dd($user);
 
            
         }
@@ -73,6 +72,7 @@ class UsersController extends AbstractController
     {
         $form = $this->createForm(User1Type::class, $user);
         $form->handleRequest($request);
+        
 
         if ($form->isSubmitted() && $form->isValid()) {
             $newpassword = $form->get('password')->getData();
@@ -82,8 +82,9 @@ class UsersController extends AbstractController
                 $passwordHashed = $passwordHasher->hashPassword($user, $newpassword);
                 // je met à jour mon entité
                 $user->setPassword($passwordHashed);
-            }
 
+            }
+            
             $user->setUpdated(new DateTime());
 
 
@@ -91,7 +92,7 @@ class UsersController extends AbstractController
             $userRepository->add($user, true);
 
 
-            return $this->redirectToRoute('backoffice_users_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('backoffice_users', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('backoffice/users/edit.html.twig', [

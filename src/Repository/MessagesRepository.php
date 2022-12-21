@@ -45,7 +45,8 @@ class MessagesRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('m')
             ->andWhere('m.receiver = :user_id')
             ->setParameter('user_id', $id)
-
+            ->andWhere('m.isHidden = false')
+            ->orderBy("m.sentAt", "DESC")
             ->getQuery()
             ->getResult();
     }
@@ -57,7 +58,8 @@ class MessagesRepository extends ServiceEntityRepository
        return $this->createQueryBuilder('m')
             ->andWhere('m.sender = :user_id')
             ->setParameter('user_id', $id)
-
+            ->andWhere('m.isHidden = false')
+            ->orderBy("m.sentAt", "DESC")
             ->getQuery()
             ->getResult();
     }
