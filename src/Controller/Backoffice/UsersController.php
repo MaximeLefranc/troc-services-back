@@ -40,15 +40,16 @@ class UsersController extends AbstractController
         $form = $this->createForm(User1Type::class, $user);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            // hash the password
             $passwordHashed = $passwordHasher->hashPassword($user, $user->getPassword());
             $user->setPassword($passwordHashed);
             $user->setCreated(new \DateTime());
 
            
         }
-
+            
         return $this->renderForm('backoffice/users/new.html.twig', [
             'user' => $user,
             'form' => $form,
