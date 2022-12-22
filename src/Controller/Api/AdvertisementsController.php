@@ -140,7 +140,7 @@ class AdvertisementsController extends ApiController
      * @param ?Advertisements $advertisements
      * @param SerializerInterface $serializerInterface
      * @param EntityManagerInterface $entityManagerInterface
-     * @Route("/api/advertisements/{id<\d+>}/edit", name="edit_advertisement", methods={"PUT", "PATCH"})
+     * @Route("/api/advertisements/{id<\d+>}/edit", name="edit_advertisements", methods={"PUT", "PATCH"})
      */
     public function editAdvertisement(
         Advertisements $advertisements,
@@ -164,7 +164,7 @@ class AdvertisementsController extends ApiController
             [AbstractNormalizer::OBJECT_TO_POPULATE => $advertisements]
         );
         $advertisements->setUpdatedAt(new DateTime('now'));
-        dd($advertisements);
+      
         // update BDD
         $entityManagerInterface->flush();
 

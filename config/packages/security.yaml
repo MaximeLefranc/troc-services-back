@@ -48,7 +48,7 @@ security:
         # toutes les pages sauf celles précisées plus bas
         - { path: ^/api/, roles: PUBLIC_ACCESS}
         # toutes les routes en edit (edit une annonce et edit un user)
-        - { path: ^/api/\w+/\d+/edit, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST]}
+        - { path: ^/api/\w+/\d+/edit, roles: IS_AUTHENTICATED_FULLY  , methods: [GET, POST, PUT, PATCH]}
         # toutes les routes en new (ex:ajouter une annonce)
         - { path: ^/api/\w+/new, roles: IS_AUTHENTICATED_FULLY , methods: [GET, POST]}
          # routes delete : methods: PUT et DELETE
