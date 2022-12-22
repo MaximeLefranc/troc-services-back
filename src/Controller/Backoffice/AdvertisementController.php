@@ -21,6 +21,7 @@ class AdvertisementController extends AbstractController
      */
     public function index(AdvertisementsRepository $advertisementsRepository): Response
     {
+        // return the twig view and the repository to show all repositories
         return $this->render('backoffice/advertisement/index.html.twig', [
             'advertisements' => $advertisementsRepository->findAll(),
         ]);
@@ -31,7 +32,7 @@ class AdvertisementController extends AbstractController
      */
     public function moderation(AdvertisementsRepository $advertisementsRepository): Response
     {
-
+        // return the twig view and the repository to show advert who make moderations
         return $this->render('backoffice/advertisement/moderation.html.twig', [
             'advertisements' => $advertisementsRepository->findAdvertToModerate(),
         ]);
@@ -43,7 +44,7 @@ class AdvertisementController extends AbstractController
     public function showModeration(Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
     {
 
-
+        // return the twig view and the repository to show one advert to moderate
         return $this->render('backoffice/advertisement/show_moderation.html.twig', [
             'advertisement' => $advertisement,
         ]);
@@ -82,7 +83,7 @@ class AdvertisementController extends AbstractController
             ->setUpdatedAt(new DateTime);
         // persist + flush
         $advertisementsRepository->add($refuseAdvert, true);
-
+        // add a flash message 
         $this->addFlash("advertisement-refuse", "L'annonce à bien été refusée");
         // redirect route
         return $this->redirectToRoute('moderation_advertisements');
@@ -98,16 +99,20 @@ class AdvertisementController extends AbstractController
      */
     public function add(Request $request, AdvertisementsRepository $advertisementsRepository): Response
     {
+        // make a new entry
         $advertisement = new Advertisements();
+        // create the form
         $form = $this->createForm(AdvertisementsType::class, $advertisement);
+
         $form->handleRequest($request);
-
+        // if the form is valid and submit
         if ($form->isSubmitted() && $form->isValid()) {
+            // persist + flush
             $advertisementsRepository->add($advertisement, true);
-
+            // redirection after the add
             return $this->redirectToRoute('backoffice_advertisements', [], Response::HTTP_SEE_OTHER);
         }
-
+        // return the wiew to show and the form
         return $this->renderForm('backoffice/advertisement/new.html.twig', [
             'advertisement' => $advertisement,
             'form' => $form,
@@ -149,7 +154,9 @@ class AdvertisementController extends AbstractController
      */
     public function delete(Request $request, Advertisements $advertisement, AdvertisementsRepository $advertisementsRepository): Response
     {
+        // compare the CSRF token
         if ($this->isCsrfTokenValid('delete' . $advertisement->getId(), $request->request->get('_token'))) {
+            // remove the advert (persist + flush)
             $advertisementsRepository->remove($advertisement, true);
         }
 
