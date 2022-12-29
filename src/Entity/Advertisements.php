@@ -83,6 +83,7 @@ class Advertisements
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"advertisements_browse"})
+     * @Groups({"user_read"})
      */
     private $isHidden = false;
 
