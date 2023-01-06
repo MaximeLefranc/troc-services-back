@@ -696,7 +696,6 @@ class ComposerStaticInit07a5648faaef1da35a212b2362e3e61f
         'App\\Form\\SkillType' => __DIR__ . '/../..' . '/src/Form/SkillType.php',
         'App\\Form\\User1Type' => __DIR__ . '/../..' . '/src/Form/User1Type.php',
         'App\\Form\\User1TypeEdit' => __DIR__ . '/../..' . '/src/Form/User1TypeEdit.php',
-        'App\\Form\\UserType' => __DIR__ . '/../..' . '/src/Form/UserType.php',
         'App\\Kernel' => __DIR__ . '/../..' . '/src/Kernel.php',
         'App\\Repository\\AdvertisementsRepository' => __DIR__ . '/../..' . '/src/Repository/AdvertisementsRepository.php',
         'App\\Repository\\CategoriesRepository' => __DIR__ . '/../..' . '/src/Repository/CategoriesRepository.php',

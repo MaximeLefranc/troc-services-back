@@ -33,7 +33,6 @@ return array(
     'App\\Form\\SkillType' => $baseDir . '/src/Form/SkillType.php',
     'App\\Form\\User1Type' => $baseDir . '/src/Form/User1Type.php',
     'App\\Form\\User1TypeEdit' => $baseDir . '/src/Form/User1TypeEdit.php',
-    'App\\Form\\UserType' => $baseDir . '/src/Form/UserType.php',
     'App\\Kernel' => $baseDir . '/src/Kernel.php',
     'App\\Repository\\AdvertisementsRepository' => $baseDir . '/src/Repository/AdvertisementsRepository.php',
     'App\\Repository\\CategoriesRepository' => $baseDir . '/src/Repository/CategoriesRepository.php',
