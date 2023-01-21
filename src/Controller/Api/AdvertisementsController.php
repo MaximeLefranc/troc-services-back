@@ -32,14 +32,16 @@ class AdvertisementsController extends ApiController
         $image->move($parameterBag->get('public') . '/img', $imageName);
 
         $ad->setImageName($imageName);
-     
+
         $entityManagerInterface->persist($ad);
         $entityManagerInterface->flush();
 
-        return $this->json([
-            'message' => 'Image uploaded successfully.'
-        ],
-    Response::HTTP_CREATED);
+        return $this->json(
+            [
+                'message' => 'Image uploaded successfully.'
+            ],
+            Response::HTTP_CREATED
+        );
     }
 
     /**
@@ -51,11 +53,8 @@ class AdvertisementsController extends ApiController
         Request $request,
         ValidatorInterface $validatorInterface,
         EntityManagerInterface $em
-       
-    
-
-   
-    ) {
+    ) 
+    {
 
         // retrieve the content by the class Request with the method getContent
         $content = $request->getContent();
@@ -63,23 +62,20 @@ class AdvertisementsController extends ApiController
         // Verify the JSON and deserialize the JSON content
         try {
             $ad = $serializerInterface->deserialize($content, Advertisements::class, 'json');
-        
+
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $ad->setCreatedAt($date);
             $ad->setUser($this->getUser());
 
             $ad->setImageName('image-advert.jpeg');
-            
+
 
             $errors = $validatorInterface->validate($ad);
 
-            if (count($errors) > 0) 
-            {
+            if (count($errors) > 0) {
                 return $this->json($errors, 400);
             }
-
-           
         } catch (NotEncodableValueException $e) {
             return $this->json([
                 'status' => '400',
@@ -90,15 +86,17 @@ class AdvertisementsController extends ApiController
         $em->flush();
         //return the correct http response
 
-        return $this->json([
-            'newAdvertId' => $ad->getId()], 
+        return $this->json(
+            [
+                'newAdvertId' => $ad->getId()
+            ],
             Response::HTTP_CREATED
 
-    
+
         );
     }
 
-     /**
+    /**
      * @Route("/api/advertisements", name="browse_advertisements", methods={"GET"})
      */
     public function browseAdvertisement(AdvertisementsRepository $advertisementsRepository, SerializerInterface $serializerInterface)
@@ -106,14 +104,26 @@ class AdvertisementsController extends ApiController
 
 
         return $this->json200($advertisementsRepository->findAllAdvertModerated(), [
-        
-            "groups" => 
-           // add category to the json content
+
+            "groups" =>
+            // add category to the json content
             'skill_browse',  // add skill to the json content
             'advertisements_browse'
-    
+
         ]);
     }
+
+    /**
+     * @Route ("/api/advertisements/filter", name="filter_advertisements", methods={"PUT","PATCH"})
+     */
+
+     public function searchAdvertisements(AdvertisementsRepository $advertisementsRepository, Request $request)
+     {
+            $filter = $request->query->get('filter');
+            dump($filter);
+
+            return $filter;
+     }
 
     /**
      * @Route("/api/advertisements/{id<\d+>}", name="read_advertisements", methods={"GET"})
@@ -132,7 +142,7 @@ class AdvertisementsController extends ApiController
             "groups" => 'advertisements_browse',
             'category_browse', // add category to the json content
             'skill_browse',  // add skill to the json content
-         
+
         ]);
     }
 
@@ -164,7 +174,7 @@ class AdvertisementsController extends ApiController
             [AbstractNormalizer::OBJECT_TO_POPULATE => $advertisements]
         );
         $advertisements->setUpdatedAt(new DateTime('now'));
-      
+
         // update BDD
         $entityManagerInterface->flush();
 

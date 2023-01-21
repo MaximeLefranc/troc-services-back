@@ -35,7 +35,7 @@
                 <td>
                     <a href="{{ path('backoffice_users_show', {'id': user.id}) }}" class="btn btn-primary">voir</a>
                     <a href="{{ path('backoffice_users_edit', {'id': user.id}) }}" class="btn btn-warning">éditer</a>
-                    <a href="{{ path('backoffice_users_edit', {'id': user.id}) }}" class="btn btn-danger">éditer</a>
+                    <a href="{{ path('backoffice_users_delete', {'id': user.id}) }}" class="btn btn-danger">supprimer</a>
                 </td>
             </tr>
         {% else %}
