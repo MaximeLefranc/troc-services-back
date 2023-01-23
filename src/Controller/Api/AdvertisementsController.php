@@ -113,18 +113,7 @@ class AdvertisementsController extends ApiController
         ]);
     }
 
-    /**
-     * @Route ("/api/advertisements/filter", name="filter_advertisements", methods={"PUT","PATCH"})
-     */
-
-     public function searchAdvertisements(AdvertisementsRepository $advertisementsRepository, Request $request)
-     {
-            $filter = $request->query->get('filter');
-            dump($filter);
-
-            return $filter;
-     }
-
+   
     /**
      * @Route("/api/advertisements/{id<\d+>}", name="read_advertisements", methods={"GET"})
      */
