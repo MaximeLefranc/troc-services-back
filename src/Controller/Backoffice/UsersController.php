@@ -20,7 +20,6 @@ class UsersController extends AbstractController
 {
 
 
-    
     /**
      * @Route("/", name="backoffice_users", methods={"GET"})
      */
