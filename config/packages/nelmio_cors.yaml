@@ -1,7 +1,7 @@
 nelmio_cors:
     defaults:
         origin_regex: true
-        Access-Control-Allow-Origin : https://www.trocservices.fr
+        Access-Control-Allow-Origin : https://.trocservices.fr
         allow_origin: ['%env(CORS_ALLOW_ORIGIN)%']
         allow_methods: ['GET', 'OPTIONS', 'POST', 'PUT', 'PATCH', 'DELETE']
         allow_headers: ['Content-Type', 'Authorization']
