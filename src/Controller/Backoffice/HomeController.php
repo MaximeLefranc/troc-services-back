@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 class HomeController extends AbstractController
 {
 /**
-     * @Route("/", name="backoffice_home", methods={"GET"})
+     * @Route("/home", name="backoffice_home", methods={"GET"})
      * @isGRanted("ROLE_ADMIN")
      */
     public function index(AdvertisementsRepository $advertisementsRepository): Response
