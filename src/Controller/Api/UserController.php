@@ -33,28 +33,28 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 
 class UserController extends ApiController
-{   
-     /**
-   * @Route("/upload/{id}", name="image_upload", methods={"POST", "PUT"})
-   */
-  public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
-  {
+{
+    /**
+     * @Route("/upload/{id}", name="image_upload", methods={"POST", "PUT"})
+     */
+    public function uploadImage($id, UserRepository $userRepository, Request $request, EntityManagerInterface $entityManagerInterface, ParameterBagInterface $parameterBag): Response
+    {
 
-    $user = $userRepository->find($id);
-    $image = $request->files->get('file');
-    $imageName = uniqid() . '_' . $image->getClientOriginalName();
-    $image->move($parameterBag->get('public') . '/img', $imageName);
+        $user = $userRepository->find($id);
+        $image = $request->files->get('file');
+        $imageName = uniqid() . '_' . $image->getClientOriginalName();
+        $image->move($parameterBag->get('public') . '/img', $imageName);
 
-    $user->setImageName($imageName);
+        $user->setImageName($imageName);
 
 
-    $entityManagerInterface->persist($user);
-    $entityManagerInterface->flush();
+        $entityManagerInterface->persist($user);
+        $entityManagerInterface->flush();
 
-    return $this->json([
-        'message' => 'Image uploaded successfully.'
-    ]);
-  }
+        return $this->json([
+            'message' => 'Image uploaded successfully.'
+        ]);
+    }
 
     /**
      * @Route("/new", name="api_create_user", methods={"POST"})
@@ -66,72 +66,72 @@ class UserController extends ApiController
      */
 
     public function new(UserRepository $userRepository, ValidatorInterface $validatorInterface, Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $entityManagerInterface, UserPasswordHasherInterface $passwordHasher)
-  {
-    
-    $jsonContent = $request->getContent();
+    {
+
+        $jsonContent = $request->getContent();
 
 
-    try {
-        $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
+        try {
+            $newUser = $serializerInterface->deserialize($jsonContent, User::class, 'json');
 
 
-        $newUser->setUsername($newUser->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
-        $hashedPassword = $passwordHasher->hashPassword(
-            $newUser,
-            $newUser->getPassword()
-        );
-        $newUser->setPassword($hashedPassword)
-        ->setReference($this->referenceFormat())
-        ->setRoles(["ROLE_USER"])
-        ->setCreated(new DateTime());
+            $newUser->setUsername($newUser->getEmail()); //string hashPassword(PasswordAuthenticatedUserInterface $user, string $plainPassword)    Hashes the plain password for the given user.
+            $hashedPassword = $passwordHasher->hashPassword(
+                $newUser,
+                $newUser->getPassword()
+            );
+            $newUser->setPassword($hashedPassword)
+                ->setReference($this->referenceFormat())
+                ->setRoles(["ROLE_USER"])
+                ->setCreated(new DateTime());
 
-        if ($newUser->setImageFile() === null) {
-            $newUser->setImageName('photo-avatar.jpeg');
+            if ($newUser->setImageFile() === null) {
+                $newUser->setImageName('photo-avatar.jpeg');
+            }
+
+            $errors = $validatorInterface->validate($newUser);
+
+            if (count($errors) > 0) {
+                return $this->json($errors, 400);
+            }
+        } catch (Exception $e) {
+            return $this->json(
+                "JSON mal formé",
+                Response::HTTP_BAD_REQUEST
+            );
         }
 
-        $errors = $validatorInterface->validate($newUser);
+        $email = $newUser->getEmail();
+        $nickname = $newUser->getNickname();
+        $checkEmail = $userRepository->findByEmail($email);
 
-        if (count($errors) > 0) {
-            return $this->json($errors, 400);
+        if ($checkEmail) {
+
+            return $this->json('Cette adresse email est déja associée à un compte', 400);
         }
-    } catch (Exception $e) {
+
+        $checkNickname = $userRepository->findByNickname($nickname);
+
+        if ($checkNickname) {
+
+            return $this->json('Ce pseudo est déja utilisé par un utilisateur', 400);
+        }
+
+
+        $entityManagerInterface->persist($newUser);
+        $entityManagerInterface->flush();
+
         return $this->json(
-            "JSON mal formé",
-            Response::HTTP_BAD_REQUEST
+            [
+                'newUserId' => $newUser->getId()
+            ],
+            Response::HTTP_CREATED
         );
     }
 
-        $email= $newUser->getEmail();
-        $nickname = $newUser->getNickname();
-        $checkEmail= $userRepository->findByEmail($email);
-
-        if($checkEmail){
-
-            return $this->json('Cette adresse email est déja associée à un compte', 400);
-
-        }
-        
-        $checkNickname = $userRepository->findByNickname($nickname);
-
-        if($checkNickname){
-
-            return $this->json('Ce pseudo est déja utilisé par un utilisateur', 400);
-
-        }
-        
-
-    $entityManagerInterface->persist($newUser);
-    $entityManagerInterface->flush();
-
-    return $this->json([
-      'newUserId' => $newUser->getId()
-    ],
-    Response::HTTP_CREATED);
-  }
 
 
-    
-       
+
 
     public function referenceFormat()
     {
@@ -156,10 +156,10 @@ class UserController extends ApiController
             [
                 "groups" =>
                 [
-                   'user_read',
-                   'skill_browse',
-                   'category_browse'
-                   
+                    'user_read',
+                    'skill_browse',
+                    'category_browse'
+
                 ]
             ]
         );
@@ -196,9 +196,9 @@ class UserController extends ApiController
             [
                 "groups" =>
                 [
-                     // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                     'user_read', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
-                     'skill_browse', 
+                    // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'user_read', // AJouter les advertissement pour afficher les annonces pour un profils utilisateur
+                    'skill_browse'
 
 
                 ]
@@ -212,7 +212,9 @@ class UserController extends ApiController
      */
     public function edit(User $user, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
-        if ($user === null) {return $this->json404("Pas de membre pour cet ID");}
+        if ($user === null) {
+            return $this->json404("Pas de membre pour cet ID");
+        }
 
         $content = $request->getContent();
 
@@ -222,7 +224,7 @@ class UserController extends ApiController
             'json',
             //? avec le paramètre context, on précise l'objet à mettre à jour 
             [AbstractNormalizer::OBJECT_TO_POPULATE => $user]
-        );// on met à jour la BDD
+        ); // on met à jour la BDD
         $user->setUpdated(new DateTime('now'));
         $em->flush();
 
@@ -239,7 +241,7 @@ class UserController extends ApiController
                 // list of groups to use
                 "groups" => ['user_read']
             ]
-            
+
         );
     }
 
@@ -251,18 +253,19 @@ class UserController extends ApiController
     public function delete(Request $request, User $user, UserRepository $userRepository, TokenStorageInterface $tokenStorage): Response
     {
 
-        
-    $userRepository->remove($user, true);
+
+        $userRepository->remove($user, true);
 
 
-        return $this->json($user, Response::HTTP_ACCEPTED, [],[
+        return $this->json($user, Response::HTTP_ACCEPTED, [], [
             // list of groups to use
-            "groups" => ['user_read',    
-            'skill_browse', 
-             
-            'message_browse'
-]
+            "groups" => [
+                'user_read',
+                'skill_browse',
 
-        ] );
+                'message_browse'
+            ]
+
+        ]);
     }
 }
