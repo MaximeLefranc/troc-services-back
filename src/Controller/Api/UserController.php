@@ -208,7 +208,7 @@ class UserController extends ApiController
 
     /**
      * @Route("/{id}/edit", name="api_edit_user", methods={"GET", "POST", "PUT"})
-     * @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted("ROLE_USER")")
      */
     public function edit(User $user, UserPasswordHasherInterface $passwordHasher, ValidatorInterface $validatorInterface, SerializerInterface $serializerInterface, Request $request, EntityManagerInterface $em)
     {
@@ -248,7 +248,7 @@ class UserController extends ApiController
 
     /**
      * @Route("/{id}/delete", name="delete_user", methods={"DELETE"})
-     *  @Security("is_granted('ROLE_USER')")
+     * @Security("is_granted("ROLE_USER")")
      */
     public function delete(Request $request, User $user, UserRepository $userRepository, TokenStorageInterface $tokenStorage): Response
     {
