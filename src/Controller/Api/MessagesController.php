@@ -19,7 +19,7 @@ class MessagesController extends ApiController
 {
     /** show all received messages
      * @Route("/api/user/{id}/messages", name="browse_messages", methods={"GET"})
-     * @Security("is_granted("ROLE_USER")")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function browseMessageById($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
     {
@@ -45,7 +45,7 @@ class MessagesController extends ApiController
 
     /** send a message
      * @Route("/api/user/{id<\d+>}/messages/send", name="send_message", methods={"POST"})
-     * @Security("is_granted("ROLE_USER")")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function sendMessage(
         Request $request,
@@ -103,7 +103,7 @@ class MessagesController extends ApiController
     }
     /** show messages sent
      * @Route("/api/user/{id<\d+>}/messages/sent", name="sent_messages", methods={"GET"})
-     * @Security("is_granted("ROLE_USER")")
+     * @Security("is_granted('ROLE_USER')")
      */
 
     public function findMessagesSent($id, MessagesRepository $messagesRepository, UserRepository $userRepository)
@@ -130,7 +130,7 @@ class MessagesController extends ApiController
      * @param SerializerInterface $serializerInterface
      * @param EntityManagerInterface $entityManagerInterface
      * @Route("/api/messages/{id<\d+>}/delete", name="delete_message", methods={"PUT"})
-     * @Security("is_granted("ROLE_USER")")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function deleteMessage(
         Messages $messages,
@@ -173,7 +173,7 @@ class MessagesController extends ApiController
      * @param SerializerInterface $serializerInterface
      * @param EntityManagerInterface $entityManagerInterface
      * @Route("/api/messages/{id<\d+>}/edit", name="edit_messages", methods={"PUT"})
-     * @Security("is_granted("ROLE_USER")")
+     * @Security("is_granted('ROLE_USER')")
      */
     public function editMessage(
         Messages $messages,
