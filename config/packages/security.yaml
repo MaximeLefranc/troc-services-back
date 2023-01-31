@@ -55,6 +55,7 @@ security:
         - { path: ^/api/\w+/\d+, roles: IS_AUTHENTICATED_FULLY , methods: [PUT, DELETE]}
         # toutes routes concernant les messages
         - { path: ^/api/user/\d+/messages, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/user/\d+/messages/send, roles: IS_AUTHENTICATED_FULLY, methods: [POST] }
         # toutes routes concernant les messages
         - { path: ^/api/messages/, roles: IS_AUTHENTICATED_FULLY }
         # contact
