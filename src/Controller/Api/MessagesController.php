@@ -87,7 +87,7 @@ class MessagesController extends ApiController
         //return the correct http response
 
         return $this->json(
-            $message,
+      
             Response::HTTP_CREATED
         );
     }
