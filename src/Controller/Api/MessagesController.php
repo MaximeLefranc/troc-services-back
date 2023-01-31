@@ -74,16 +74,16 @@ class MessagesController extends ApiController
                 return $this->json($errors, 400);
             }
 
-            $em->persist($message);
-
-            $em->flush();
+        
         } catch (NotEncodableValueException $e) {
             return $this->json([
                 'status' => '400',
                 'message' => $e->getMessage()
             ], 400);
         }
+        $em->persist($message);
 
+        $em->flush();
         //return the correct http response
 
         return $this->json(
