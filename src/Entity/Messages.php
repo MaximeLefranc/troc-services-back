@@ -57,7 +57,7 @@ class Messages
     private $isHidden = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender", nullable=true)
      * @Groups({"message_browse"})
      *
      * 
@@ -65,7 +65,7 @@ class Messages
     private $sender;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver", nullable=true)
      * @Groups({"message_browse"})
      * 
      * 
