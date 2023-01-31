@@ -88,16 +88,7 @@ class MessagesController extends ApiController
 
         return $this->json(
             $message,
-            Response::HTTP_CREATED,
-            [],
-            [
-                // list of groups to use
-                "groups" => 'message_browse',
-
-                'user_read',
-                'message_sender_receiver'
-
-            ]
+            Response::HTTP_CREATED
         );
     }
     /** show messages sent
