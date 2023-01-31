@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MessagesRepository;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -87,7 +88,8 @@ class Messages
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+
+       
     }
 
     public function getId(): ?int

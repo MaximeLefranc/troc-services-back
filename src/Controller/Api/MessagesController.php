@@ -63,7 +63,6 @@ class MessagesController extends ApiController
             $date = new DateTime();
             $date->format('Y-m-d H:i:s');
             $message->setSentAt($date);
-
             $message->setSender($this->getUser()); //add the sender of the message to the db
             $message->setIsRead(false);
             $message->setIsHidden(false);
