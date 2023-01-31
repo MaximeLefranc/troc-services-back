@@ -51,9 +51,8 @@ class MessagesController extends ApiController
         Request $request,
         SerializerInterface $serializerInterface,
         ValidatorInterface $validatorInterface,
-        EntityManagerInterface $em,
-        UserRepository $userRepository,
-        $id
+        EntityManagerInterface $em
+   
     ) {
         $content = $request->getContent();
 
