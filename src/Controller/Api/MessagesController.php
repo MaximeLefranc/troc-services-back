@@ -45,7 +45,7 @@ class MessagesController extends ApiController
 
     /** send a message
      * @Route("/api/user/{id<\d+>}/messages/send", name="send_message", methods={"POST"})
-     * 
+     * @Security("is_granted('ROLE_USER')")
      */
     public function sendMessage(
         Request $request,
