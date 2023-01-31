@@ -1,5 +1,4 @@
-
-    web_profiler:
+web_profiler:
         toolbar: true
         intercept_redirects: false
 
