@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MessagesRepository::class)
@@ -34,7 +35,7 @@ class Messages
 
     /**
      * @ORM\Column(type="datetime")
-     * 
+     * @Assert\NotNull
      * @Groups({"message_browse"})
      * 
      */
@@ -57,7 +58,7 @@ class Messages
     private $isHidden = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender", nullable=true)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sender")
      * @Groups({"message_browse"})
      *
      * 
@@ -65,7 +66,7 @@ class Messages
     private $sender;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver", nullable=true)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="receiver")
      * @Groups({"message_browse"})
      * 
      * 
