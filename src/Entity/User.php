@@ -9,13 +9,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+
 use Fresh\VichUploaderSerializationBundle\Annotation as Fresh;
-use JMS\Serializer\Annotation as JMS;
+use App\Entity\Messages;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\Serializer\Annotation\MaxDepth;
+
 
 
 
@@ -209,6 +208,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->advertisements = new ArrayCollection();
         $this->sender = new ArrayCollection();
+        $this->receiver = new ArrayCollection();
         $this->skill = new ArrayCollection();
         $this->imageFile = new ArrayCollection();
     
