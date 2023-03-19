@@ -1,41 +1,39 @@
-# projet-1-serv-o-back
+# Project Troc'Services Back
 
-Chaque groupe pourra cloner le repo back et lancer le serveur de dev pour avoir accés aux API
+Command to start the development server `php -S 0.0.0.0:8080 -t public`
 
-Commande pour démarrer le serveur de dev `php -S 0.0.0.0:8080 -t public`
+## 1. Installing the project:
 
-## 1. Installation du projet:
-
-### a. Installation des dépendances:
+### a. Installing the dependencies:
 
 `composer create-project symfony/skeleton trocservice`
 
 `mv trocservice/* trocservice/.* .`
 
 
-`composer require symfony/webapp-pack:*` (installe toutes les dépendances de symfony)
+`composer require symfony/webapp-pack:*` (install all symfony dependencies)
 
-### b. Création de la base de donnée:
+### b. Creation of the database:
 
-Dans adminer on a créé la base de donnée "trocservice" avec l'utilisateur "trocservice / trocservice"
+In adminer or php my admin we created the database "trocservice" with the user "trocservice / trocservice"
 
-On créé la connexion a la bdd en modifiant le fichier .env et .env.local:
+We create the connection to the database by modifying the .env and .env.local files:
 
 `DATABASE_URL="mysql://trocservice:trocservice@127.0.0.1:3306/trocservice?serverVersion=mariadb-10.3.25"`
 
-Pour installer votre base de données en local, vous devez modifier votre fichier ".env.local" avec les infos suivantes en remplaçant les infos :
+To install your database locally, you must modify your ".env.local" file with the following info by replacing the info:
 
 `DATABASE_URL="mysql://nomutilisateur:motdepasse@127.0.0.1:3306/nomdelabdd?serverVersion=mariadb-10.3.25"`
 
-Ensuite, dans le terminal, vous devez faire un `bin/console d:d:c` (doctrine:database:create) 
+Then in the terminal you need to do  `bin/console d:d:c` (doctrine:database:create)
 
-On installe les entités via Symfony:
+We install the entities via Symfony:
 
-toutes les tables + relations du MLD -> cf. MLD cahier des charges!
+all the tables + relations
 
-On créé les entités via Doctrine avec ` bin\console make:entity` 
+We create the entities via Doctrine with ` bin\console make:entity`
 
-On ajoute les propriétés de chaque entité et on migre les données afin qu'elles apparaissent dans la base de donnée
+We add the properties of each entity and we migrate the data so that they appear in the database
 
 Migration:
 
@@ -43,5 +41,5 @@ Migration:
 
 `bin/console doctrine:migrations:migrate `
 
-On créé les relations entre les entités (entre les tables) avec make:entity et le type "relation"
--> cf. MLD et dictionnaire de données.
+We create the relationships between the entities (between the tables) with make:entity and the type "relation"
+-> see MLD and Data Dictionary.
